@@ -140,10 +140,20 @@ export function HeroSection() {
           >
             <FaGithub className="w-6 h-6" />
           </a>
-          <a href="#" className="hover:text-foreground transition-colors">
+          <a
+            href="https://gitlab.com/boyaghnia"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
             <FaGitlab className="w-6 h-6" />
           </a>
-          <a href="#" className="hover:text-foreground transition-colors">
+          <a
+            href="https://www.youtube.com/@boyaghnia"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
             <FaYoutube className="w-6 h-6" />
           </a>
           <a

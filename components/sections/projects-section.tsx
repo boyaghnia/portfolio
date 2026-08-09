@@ -2,50 +2,73 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Code2, Rocket, Paintbrush, MonitorSmartphone, ExternalLink } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { ExternalLink } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { Badge } from "@/components/ui/badge";
 
 const FADE_IN = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-const PROJECTS = [
+interface Project {
+  title: string;
+  desc: string;
+  tech: string[];
+  image: string;
+  link: string;
+  github?: string;
+}
+
+const PROJECTS: Project[] = [
   {
-    title: "Distribusi Jaringan Internet",
-    desc: "Instalasi, troubleshooting, dan monitoring jaringan internet di Bandar Udara Bade.",
-    tech: ["Mikrotik", "HTML", "CSS", "JavaScript"],
-    icon: <Code2 className="w-6 h-6" />,
-    link: "#",
+    title: "Website Direktorat Jenderal Perhubungan Udara",
+    desc: "Migrasi dan pengembangan ulang website resmi Direktorat Jenderal Perhubungan Udara ke platform Laravel, disertai redesign UI/UX, pengembangan fitur, optimasi performa, dan penyempurnaan struktur informasi untuk mendukung layanan informasi publik yang lebih modern dan responsif.",
+    tech: ["Laravel", "PHP", "Alpine.js", "Tailwind CSS"],
+    image: "/hubud-web.jpg",
+    link: "https://hubud.kemenhub.go.id",
   },
   {
-    title: "Bade Airport Social Media",
-    desc: "Menciptakan desain visual yang informatif dan konsisten dengan identitas bandara.",
-    tech: ["Photoshop", "Lightroom", "Illustrator"],
-    icon: <Paintbrush className="w-6 h-6" />,
+    title: "e-SOP (Electronic Standar Operational Procedure) DJPU",
+    desc: "Aplikasi E-SOP dikembangkan sebagai sistem informasi internal berbasis web untuk menggantikan proses penyusunan dan pengelolaan SOP yang sebelumnya dilakukan secara manual dan parsial menggunakan aplikasi perkantoran. Sistem menyediakan mekanisme terpusat untuk menjamin keseragaman format, metadata, struktur dokumen, pengawasan, dan ketersediaan dokumen final yang telah disahkan.",
+    tech: [
+      "Laravel",
+      "Inertia",
+      "React",
+      "PHP",
+      "Typescript",
+      "Alpine.js",
+      "Tailwind CSS",
+    ],
+    image: "/e-sop.jpg",
     link: "#",
+    github: "private",
   },
   {
-    title: "ASNBeasiswa Social Media",
-    desc: "Creative Team dan Graphic Designer untuk kebutuhan konten edukasi beasiswa ASN.",
-    tech: ["Photoshop", "Lightroom", "Illustrator"],
-    icon: <Paintbrush className="w-6 h-6" />,
-    link: "#",
+    title: "Aviasihub UI Components",
+    desc: "Aviasihub.site adalah UI component library yang saya buat sebagai pedoman standar tata letak visual. Platform ini menyediakan elemen antarmuka responsif siap pakai. Seluruh pengembangan web dan aplikasi di lingkungan Direktorat Jenderal Perhubungan Udara diwajibkan mengimplementasikan standarisasi dari Aviasihub.site untuk memastikan keseragaman desain, kemudahan integrasi, dan profesionalitas layanan digital.",
+    tech: [
+      "Laravel",
+      "PHP",
+      "Alpine.js",
+      "Tailwind CSS",
+      "Bootstrap",
+      "Vanilla CSS",
+    ],
+    image: "/aviasihub.png",
+    link: "https://aviasihub.site",
   },
   {
-    title: "3D Modelling Waditra Sunda",
-    desc: "Membuat 3D model alat musik tradisional Sunda untuk pelestarian budaya.",
-    tech: ["Blender", "Illustrator", "Photoshop"],
-    icon: <Rocket className="w-6 h-6" />,
-    link: "#",
+    title: "Automation Script for Pockie Ninja Game",
+    desc: "Created a custom Tampermonkey script to automate gameplay in Pockie Ninja Online, significantly enhancing efficiency and user experience. The script automates several core in-game features.",
+    tech: [
+      "Tampermonkey",
+      "JavaScript",
+      "DOM Manipulation",
+      "Mutation Observers",
+    ],
+    image: "/pockie-ninja.jpg",
+    link: "https://www.youtube.com/watch?v=2Iorid9Y7rY&list=PLKVk0YkfbJgAa7w5efLeekQDFIgMerlfq",
   },
 ];
 
@@ -53,39 +76,53 @@ export function ProjectsSection() {
   return (
     <motion.section
       id="projects"
-      className="py-12"
+      className="py-12 relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={{
-        visible: { transition: { staggerChildren: 0.1 } },
+        visible: { transition: { staggerChildren: 0.15 } },
       }}
     >
       <motion.div variants={FADE_IN} className="mb-8">
         <h2 className="text-3xl font-bold tracking-tight">Proyek & Karya</h2>
         <p className="text-md text-muted-foreground mt-2">
-          Beberapa proyek dan hasil karya yang telah saya kerjakan.
+          Beberapa proyek dan hasil karya yang telah saya kerjakan
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {PROJECTS.map((project, i) => (
-          <motion.div key={i} variants={FADE_IN} className="h-full">
-            <Card className="h-full bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-colors group flex flex-col rounded-none">
-              <CardHeader>
-                <div className="mb-4 p-3 bg-primary/10 w-fit rounded-none border border-primary/20 text-primary transition-transform duration-500 group-hover:-translate-y-1 group-hover:shadow-sm">
-                  {project.icon}
-                </div>
-                <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
+      <div className="flex flex-col gap-12">
+        {PROJECTS.map((project, i) => {
+          // Alternating layout for desktop
+          const isEven = i % 2 === 0;
+
+          return (
+            <motion.div
+              key={i}
+              variants={FADE_IN}
+              className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} group bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-colors duration-500 overflow-hidden rounded-none min-h-[300px]`}
+            >
+              {/* Image Container */}
+              <div className="w-full lg:w-1/2 relative overflow-hidden bg-muted/10">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-64 lg:h-full object-cover filter grayscale-50 group-hover:grayscale-0 transition-all duration-700 scale-100"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-background/80 lg:bg-linear-to-r lg:from-background/20 to-transparent pointer-events-none" />
+              </div>
+
+              {/* Content Container */}
+              <div className="w-full lg:w-1/2 p-6 md:p-8 lg:p-10 flex flex-col justify-center relative">
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
                   {project.title}
-                </CardTitle>
-                <CardDescription className="text-base mt-2 leading-relaxed">
+                </h3>
+
+                <p className="text-muted-foreground leading-relaxed mb-6">
                   {project.desc}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent className="grow flex flex-col justify-end pb-6">
-                <div className="flex flex-wrap gap-2 pt-2">
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-8 mt-auto">
                   {project.tech.map((t) => (
                     <Badge
                       key={t}
@@ -96,22 +133,44 @@ export function ProjectsSection() {
                     </Badge>
                   ))}
                 </div>
-              </CardContent>
-              
-              <CardFooter className="pt-4 pb-4 border-t border-border/30 mt-auto bg-muted/5 group-hover:bg-primary/5 transition-colors">
-                 <a 
-                   href={project.link} 
-                   target="_blank" 
-                   rel="noopener noreferrer" 
-                   className="inline-flex items-center gap-2 text-sm font-semibold text-foreground group-hover:text-primary transition-colors w-full"
-                 >
-                    <ExternalLink className="w-4 h-4" />
-                    Lihat Proyek
-                 </a>
-              </CardFooter>
-            </Card>
-          </motion.div>
-        ))}
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href={project.link !== "#" ? project.link : undefined}
+                    target={project.link !== "#" ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center justify-center px-5 py-2.5 border border-primary bg-primary/10 hover:bg-primary hover:text-primary-foreground text-primary text-sm font-semibold transition-all duration-300 w-full sm:w-fit ${project.link === "#" ? "opacity-50 cursor-not-allowed hover:bg-primary/10 hover:text-primary" : ""}`}
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    {project.link === "#" ? "No Live Site" : "Live Site"}
+                  </a>
+
+                  {project.github && (
+                    <a
+                      href={
+                        project.github !== "private" && project.github !== "#"
+                          ? project.github
+                          : undefined
+                      }
+                      target={
+                        project.github !== "private" && project.github !== "#"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center justify-center px-5 py-2.5 border border-border/50 bg-muted/5 hover:bg-muted/10 text-foreground text-sm font-semibold transition-all duration-300 w-full sm:w-fit ${project.github === "private" ? "opacity-60 cursor-not-allowed hover:bg-muted/5" : ""}`}
+                    >
+                      <SiGithub className="w-4 h-4 mr-2" />
+                      {project.github === "private"
+                        ? "Private GitHub"
+                        : "GitHub Repo"}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </motion.section>
   );
