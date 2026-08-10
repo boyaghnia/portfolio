@@ -93,9 +93,9 @@ export function ContactSection() {
                   lanyardWidth={4}
                   // MENGUBAH GAMBAR:
                   // Hapus komentar (//) di bawah ini dan masukkan link/path gambar Anda!
-                  frontImage="/id-card.jpg"
-                  backImage="/id-card2.jpg"
-                  // lanyardImage="/tali.jpg"
+                  frontImage="/images/misc/id-card.jpg"
+                  backImage="/images/misc/id-card2.jpg"
+                  // lanyardImage="/images/misc/tali.jpg"
                   flipTrigger={flip}
                 />
               )}
@@ -107,10 +107,10 @@ export function ContactSection() {
             variants={FADE_IN}
             className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+            <h2 className="text-3xl font-bold tracking-tight mb-4">
               Get In Touch
             </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-md mx-auto lg:mx-0">
+            <p className="text-md text-muted-foreground mb-8 max-w-md mx-auto lg:mx-0">
               Punya ide menarik atau tawaran kolaborasi? Silakan kirim pesan
               melalui form di bawah ini.
             </p>

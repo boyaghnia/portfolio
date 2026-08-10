@@ -25,11 +25,11 @@ const PROJECTS: Project[] = [
     title: "Website Direktorat Jenderal Perhubungan Udara",
     desc: "Migrasi dan pengembangan ulang website resmi Direktorat Jenderal Perhubungan Udara ke platform Laravel, disertai redesign UI/UX, pengembangan fitur, optimasi performa, dan penyempurnaan struktur informasi untuk mendukung layanan informasi publik yang lebih modern dan responsif.",
     tech: ["Laravel", "PHP", "Alpine.js", "Tailwind CSS"],
-    image: "/hubud-web.jpg",
+    image: "/images/projects/hubud-web.jpg",
     link: "https://hubud.kemenhub.go.id",
   },
   {
-    title: "e-SOP (Electronic Standar Operational Procedure) DJPU",
+    title: "e-SOP (Electronic Standard Operational Procedure) DJPU",
     desc: "Aplikasi E-SOP dikembangkan sebagai sistem informasi internal berbasis web untuk menggantikan proses penyusunan dan pengelolaan SOP yang sebelumnya dilakukan secara manual dan parsial menggunakan aplikasi perkantoran. Sistem menyediakan mekanisme terpusat untuk menjamin keseragaman format, metadata, struktur dokumen, pengawasan, dan ketersediaan dokumen final yang telah disahkan.",
     tech: [
       "Laravel",
@@ -40,7 +40,7 @@ const PROJECTS: Project[] = [
       "Alpine.js",
       "Tailwind CSS",
     ],
-    image: "/e-sop.jpg",
+    image: "/images/projects/e-sop.jpg",
     link: "#",
     github: "private",
   },
@@ -55,8 +55,15 @@ const PROJECTS: Project[] = [
       "Bootstrap",
       "Vanilla CSS",
     ],
-    image: "/aviasihub.png",
+    image: "/images/projects/aviasihub.png",
     link: "https://aviasihub.site",
+  },
+  {
+    title: "Distribusi Jaringan Internet di Bandar Udara Bade",
+    desc: "Selain aktif menjadi Humas, saya juga terlibat dalam beberapa tugas sebagai Network Administrator di bawah pengawasan Ketua Tim Teknik, Operasi dan Pelayanan Darurat (TOKPD) dan Kepala Kantor Bandar Udara Bade. Saya bertanggung jawab untuk melakukan instalasi, troubleshooting, perbaikan infrastruktur perangkat keras dan perangkat pendukung, serta monitoring dan pemeliharaan jaringan agar konektivitas internet di Bandar Udara Bade dapat berfungsi dan berjalan dengan baik.",
+    tech: ["MikroTik", "Bandwidth Management", "DNS Server", "WinBox"],
+    image: "/images/projects/jaringan-bade.jpeg",
+    link: "/project-bade",
   },
   {
     title: "Automation Script for Pockie Ninja Game",
@@ -67,8 +74,9 @@ const PROJECTS: Project[] = [
       "DOM Manipulation",
       "Mutation Observers",
     ],
-    image: "/pockie-ninja.jpg",
+    image: "/images/projects/pockie-ninja.jpg",
     link: "https://www.youtube.com/watch?v=2Iorid9Y7rY&list=PLKVk0YkfbJgAa7w5efLeekQDFIgMerlfq",
+    github: "private",
   },
 ];
 

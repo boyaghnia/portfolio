@@ -23,6 +23,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Portfolio | Boy Aghnia Rifadhan",
   description: "Portfolio | Boy Aghnia Rifadhan",
+  icons: {
+    icon: "/images/misc/logo-small.png",
+  },
 };
 
 export default function RootLayout({
