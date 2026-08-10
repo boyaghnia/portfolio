@@ -181,14 +181,14 @@ export function ExperienceSection() {
             className="relative border-l border-border/50 pb-4"
           >
             {/* Company Header */}
-            <div className="absolute left-[-0.5px] -translate-x-1/2 top-0 bg-background p-2 border border-border/50 rounded-none flex items-center justify-center shadow-sm w-9 h-9">
+            <div className="absolute left-[-0.5px] -translate-x-1/2 top-0 bg-background p-1 border border-border/50 rounded-none flex items-center justify-center shadow-sm w-9 h-9">
               {typeof exp.icon === "string" ? (
                 <Image
                   src={exp.icon}
                   alt={exp.company}
-                  width={20}
-                  height={20}
-                  className="w-6 h-6 object-contain"
+                  width={25}
+                  height={25}
+                  className="h-6 w-auto"
                 />
               ) : (
                 React.createElement(exp.icon, {
