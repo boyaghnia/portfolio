@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Building2, Briefcase, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +15,7 @@ const EXPERIENCES = [
   {
     company: "Kementerian Perhubungan Republik Indonesia",
     location: "Indonesia",
-    icon: Building2,
+    icon: "/icons/kemenhub.png",
     roles: [
       {
         title: "Penelaah Teknis Kebijakan",
@@ -99,7 +100,7 @@ const EXPERIENCES = [
   {
     company: "Kementerian Agama Republik Indonesia",
     location: "Kabupaten Ciamis, West Java, Indonesia",
-    icon: Briefcase,
+    icon: "/icons/kemenag.png",
     roles: [
       {
         title:
@@ -128,7 +129,7 @@ const EXPERIENCES = [
   {
     company: "SAS Hospitality",
     location: "Bandung, West Java, Indonesia",
-    icon: Building2,
+    icon: "/icons/sas-hospitality.png",
     roles: [
       {
         title: "Public Area Attendant & Room Attendant",
@@ -180,8 +181,20 @@ export function ExperienceSection() {
             className="relative border-l border-border/50 pb-4"
           >
             {/* Company Header */}
-            <div className="absolute left-[-0.5px] -translate-x-1/2 top-0 bg-background p-2 border border-border/50 rounded-none flex items-center justify-center shadow-sm">
-              <exp.icon className="w-5 h-5 text-foreground" />
+            <div className="absolute left-[-0.5px] -translate-x-1/2 top-0 bg-background p-2 border border-border/50 rounded-none flex items-center justify-center shadow-sm w-9 h-9">
+              {typeof exp.icon === "string" ? (
+                <Image
+                  src={exp.icon}
+                  alt={exp.company}
+                  width={20}
+                  height={20}
+                  className="w-6 h-6 object-contain"
+                />
+              ) : (
+                React.createElement(exp.icon, {
+                  className: "w-5 h-5 text-foreground",
+                })
+              )}
             </div>
 
             <div className="pl-6 md:pl-8 mb-6 pt-1">

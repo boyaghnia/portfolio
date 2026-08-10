@@ -40,7 +40,7 @@ export function HeroSection() {
       }}
     >
       <div
-        className="absolute inset-y-0 left-1/2 right-1/2 w-screen ml-[-50vw] mr-[-50vw] z-[-1] opacity-40"
+        className="absolute inset-y-0 left-1/2 right-1/2 w-screen ml-[-50vw] mr-[-50vw] z-[-1] opacity-70 dark:opacity-40"
         style={{
           maskImage:
             "radial-gradient(circle at center, black 20%, transparent 60%)",
@@ -52,10 +52,11 @@ export function HeroSection() {
           speed={0}
           squareSize={40}
           direction="diagonal"
-          borderColor="rgba(255,255,255,0.1)"
-          hoverFillColor="#222"
+          borderColor="currentColor"
+          hoverFillColor="var(--primary)"
           shape="square"
           hoverTrailAmount={15}
+          className="text-foreground/25 dark:text-white/10"
         />
       </div>
       <div className="relative z-10">
