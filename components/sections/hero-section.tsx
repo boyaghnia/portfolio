@@ -95,7 +95,7 @@ export function HeroSection() {
             <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1 font-semibold">
               Pengalaman
             </p>
-            <p className="font-semibold text-sm">~3 Tahun</p>
+            <p className="font-semibold text-sm">~4 Tahun</p>
           </div>
         </motion.div>
 
@@ -108,7 +108,10 @@ export function HeroSection() {
               Lihat Proyek
             </Button>
           </a>
-          <a href="#contact">
+          <a
+            href="https://drive.google.com/file/d/1kA9Zg0qt9hkQN3c8nJrP3ZUePVMbrRhQ/view?usp=drive_link"
+            target="_blank"
+          >
             <Button size="lg" variant="outline" className="rounded-none">
               Lihat CV <ArrowUpRight className="ml-2 w-4 h-4" />
             </Button>

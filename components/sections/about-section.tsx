@@ -160,7 +160,7 @@ export function AboutSection() {
         className="flex flex-col md:flex-row gap-12 items-center"
       >
         <motion.div variants={FADE_IN} className="relative group shrink-0">
-          <div className="relative w-64 h-72 md:w-80 md:h-85 overflow-hidden shadow-xl rounded-sm">
+          <div className="relative w-64 h-72 md:w-80 md:h-100 overflow-hidden shadow-xl rounded-sm">
             <PixelTransition
               firstContent={
                 <Image
@@ -177,7 +177,7 @@ export function AboutSection() {
                     src="/images/profile/katewak.png"
                     alt="Katewak"
                     fill
-                    className="object-cover object-[50%_60%] rounded-sm"
+                    className="object-contain rounded-sm bg-white"
                     priority
                   />
                   {/* <p className="font-bold text-2xl text-white">
