@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import {
   motion,
@@ -8,8 +9,7 @@ import {
   useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
-import { ImageUpscaleIcon, Menu, X } from "lucide-react";
-import Image from "next/image";
+import { Menu, X, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -19,9 +19,11 @@ const navItems = [
   { name: "Certificates", href: "/#certificates" },
   { name: "Projects", href: "/#projects" },
   { name: "Contact", href: "/#contact" },
+  { name: "Guestbook", href: "/guest-book" },
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
   const { scrollY } = useScroll();
   const [hidden, setHidden] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -36,6 +38,24 @@ export function Navbar() {
     }
   });
 
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    setIsOpen(false);
+    if (href.startsWith("/#")) {
+      const targetId = href.replace("/#", "");
+      if (pathname === "/") {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+          window.history.pushState(null, "", `#${targetId}`);
+        }
+      }
+    }
+  };
+
   return (
     <motion.div
       variants={{
@@ -49,22 +69,41 @@ export function Navbar() {
       <header className="pointer-events-auto border border-border/40 bg-background/60 backdrop-blur-md px-6 py-3 flex items-center justify-between gap-8 shadow-xl w-full max-w-7xl rounded-none transition-all duration-300">
         <Link
           href="/"
-          className="font-bold text-xl tracking-tight hover:opacity-80 transition-opacity"
+          className="font-bold text-xl tracking-tight hover:opacity-80 transition-opacity flex items-center gap-1.5"
         >
-          @boyaghnia
+          <span>@boyaghnia</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 px-3 py-1.5 transition-all rounded-none"
-            >
-              {item.name}
-            </Link>
-          ))}
+        <nav className="hidden md:flex items-center gap-2 lg:gap-3">
+          {navItems.map((item) => {
+            const isGuestbook = item.href === "/guest-book";
+            const isActive = isGuestbook && pathname === "/guest-book";
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+                className={`text-sm font-medium px-3 py-1.5 transition-all rounded-none flex items-center gap-1.5 ${
+                  isActive
+                    ? "text-primary font-semibold bg-primary/10 border-b-2 border-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                } ${
+                  isGuestbook
+                    ? "relative hover:text-primary transition-colors"
+                    : ""
+                }`}
+              >
+                {item.name}
+                {isGuestbook && (
+                  <span className="inline-flex items-center px-1.5 py-0.2 text-[10px] font-semibold uppercase tracking-wider rounded-sm bg-primary/15 text-primary">
+                    New
+                  </span>
+                )}
+              </Link>
+            );
+          })}
           <div className="w-px h-6 bg-border/50 mx-2"></div>
           <ThemeToggle />
         </nav>
@@ -94,16 +133,30 @@ export function Navbar() {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="pointer-events-auto w-full max-w-7xl mt-2 border border-border/40 bg-background/90 backdrop-blur-md p-4 shadow-xl rounded-none flex flex-col gap-1 md:hidden"
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 px-4 py-2.5 transition-all rounded-none"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isGuestbook = item.href === "/guest-book";
+              const isActive = isGuestbook && pathname === "/guest-book";
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={`text-base font-medium px-4 py-2.5 transition-all rounded-none flex items-center justify-between ${
+                    isActive
+                      ? "text-primary font-semibold bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  <span>{item.name}</span>
+                  {isGuestbook && (
+                    <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold uppercase tracking-wider rounded bg-primary/20 text-primary">
+                      New
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
           </motion.nav>
         )}
       </AnimatePresence>

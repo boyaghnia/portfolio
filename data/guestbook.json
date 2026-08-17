@@ -1,0 +1,60 @@
+[
+  {
+    "id": "guestbook-1",
+    "name": "Boy Aghnia Rifadhan",
+    "handle": "@boyaghnia",
+    "avatarColor": "from-amber-500 to-orange-600",
+    "tag": "Owner Note",
+    "isOwner": true,
+    "isPinned": true,
+    "message": "Halo dan selamat datang di Buku Tamu (Guestbook) portofolio saya! 👋 Silakan tinggalkan pesan, kesan, peluang kolaborasi, feedback, atau sekadar menyapa. Saya akan berusaha membalas setiap pesan kalian di sini. Terima kasih sudah berkunjung!",
+    "createdAt": "2026-08-17T08:00:00.000Z",
+    "likes": 27,
+    "replies": [
+      {
+        "id": "reply-101",
+        "name": "Rian Pratama",
+        "handle": "@rian_dev",
+        "avatarColor": "from-blue-500 to-indigo-600",
+        "isOwner": false,
+        "message": "Desain portofolionya keren banget mas! Animasinya smooth dan estetik.",
+        "createdAt": "2026-08-17T09:15:00.000Z",
+        "likes": 5
+      },
+      {
+        "id": "reply-102",
+        "name": "Boy Aghnia Rifadhan",
+        "handle": "@boyaghnia",
+        "avatarColor": "from-amber-500 to-orange-600",
+        "isOwner": true,
+        "message": "Hatur nuhun mang ian.. 🙏",
+        "createdAt": "2026-08-17T09:40:00.000Z",
+        "likes": 3
+      }
+    ]
+  },
+  {
+    "id": "guestbook-1786995053991",
+    "name": "Hymm",
+    "handle": "@ohimmm",
+    "avatarColor": "from-fuchsia-500 to-purple-600",
+    "tag": "Apresiasi",
+    "isOwner": false,
+    "isPinned": false,
+    "message": "Assalamualaikum, salam baktos.. sae kang..",
+    "createdAt": "2026-08-17T19:30:53.991Z",
+    "likes": 1,
+    "replies": [
+      {
+        "id": "reply-1786995128654",
+        "name": "Boy Aghnia Rifadhan",
+        "handle": "@boyaghnia",
+        "avatarColor": "from-amber-500 to-orange-600",
+        "isOwner": true,
+        "message": "walaikumsalam, hatur nuhun mang ohim.. 🙏",
+        "createdAt": "2026-08-17T19:32:08.654Z",
+        "likes": 0
+      }
+    ]
+  }
+]

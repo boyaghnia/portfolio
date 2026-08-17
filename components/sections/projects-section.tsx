@@ -217,6 +217,28 @@ const PROJECTS: Project[] = [
     linkType: "youtube",
     github: "private",
   },
+  {
+    id: "amparan-djati",
+    title: "Amparan Djati",
+    category: "web",
+    categoryLabel: "WordPress",
+    role: "WordPress Developer",
+    highlightTag: "Sundanese Culture",
+    featured: false,
+    desc: "Platform digital yang mendokumentasikan dan memperkenalkan seni, musik, dan budaya Sunda melalui artikel, arsip musik, serta koleksi tembang tradisional.",
+    longDesc:
+      "Website berbasis WordPress yang dikembangkan sebagai wadah dokumentasi dan arsip digital seni serta budaya Sunda. Amparan Djati memuat berbagai konten mengenai Tembang Sunda Cianjuran, Kacapi Suling, Karinding, Suling Sunda, Tarawangsa, Jentreng, rumpaka, hingga koleksi album musik tradisional. Situs ini juga menyediakan halaman dan referensi unduhan untuk berbagai koleksi musik Sunda, sekaligus menjadi media untuk mengenalkan dan melestarikan kekayaan seni tradisional Jawa Barat melalui platform digital.",
+    highlights: [
+      "Dokumentasi dan arsip digital seni budaya Sunda",
+      "Koleksi Tembang Sunda, Kacapi Suling, Karinding, dan musik tradisional",
+      "Informasi dan dokumentasi alat musik Tarawangsa & Jentreng",
+      "Katalog serta koleksi album musik Sunda",
+    ],
+    tech: ["WordPress", "Jetpack", "Content Management System"],
+    image: "/images/projects/amparandjati.jpg",
+    link: "https://amparandjati.wordpress.com",
+    linkType: "web",
+  },
 ];
 
 export function ProjectsSection() {
@@ -703,7 +725,7 @@ export function ProjectsSection() {
                       {selectedProject.linkType === "youtube" ? (
                         <>
                           <SiYoutube className="w-4 h-4 mr-1.5 text-red-500" />
-                          Tonton Demo Video
+                          Lihat Demo Video
                         </>
                       ) : (
                         <>

@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Mail } from "lucide-react";
+import Link from "next/link";
+import { Mail, MessageSquare, ArrowRight } from "lucide-react";
 import {
   FaLinkedin,
   FaGithub,
@@ -176,7 +177,36 @@ export function ContactSection() {
               </Button>
             </form>
 
-            <div className="flex justify-center lg:justify-start gap-6 items-center text-muted-foreground mt-12">
+            {/* Guestbook Alternative CTA */}
+            <div className="w-full max-w-md mx-auto lg:mx-0 mt-6 pt-6 border-t border-border/40 text-left">
+              <Link
+                href="/guest-book"
+                className="flex items-center justify-between gap-4 p-3.5 border border-border/60 bg-muted/20 backdrop-blur-sm transition-all hover:border-primary/40 hover:bg-muted/30 group cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-none bg-primary/10 text-primary border border-primary/20 shrink-0 group-hover:scale-105 transition-transform">
+                    <MessageSquare className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                      <span>Buku Tamu</span>
+                      <span className="text-[10px] font-semibold px-1.5 py-0.2 bg-primary/15 text-primary rounded-none">
+                        Guest Book
+                      </span>
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      Udah scroll sampai sini? Absen dulu yuk!
+                    </p>
+                  </div>
+                </div>
+                <div className="inline-flex items-center gap-1 text-xs font-semibold text-primary shrink-0 group-hover:translate-x-1 transition-transform">
+                  <span>Buka</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </Link>
+            </div>
+
+            <div className="flex justify-center lg:justify-start gap-6 items-center text-muted-foreground mt-8">
               <a
                 href="mailto:boyaghnia@gmail.com"
                 className="hover:text-foreground transition-colors"

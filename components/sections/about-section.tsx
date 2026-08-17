@@ -147,7 +147,7 @@ export function AboutSection() {
   return (
     <motion.section
       id="about"
-      className="pt-12"
+      className="pt-12 scroll-mt-14"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
