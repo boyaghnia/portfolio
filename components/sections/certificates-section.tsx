@@ -17,8 +17,7 @@ const CERTIFICATES = [
     date: "Aug 2025",
     description:
       "Fundamental Cybersecurity merupakan Program pembelajaran dasar keamanan siber yang memperkenalkan profesi, konsep, dan praktik utama dalam menjaga keamanan sistem dan jaringan. Peserta mempelajari jenis serangan siber, kerangka kerja keamanan (termasuk delapan domain CISSP dan konsep CIA), serta penggunaan alat analisis seperti SIEM, protokol jaringan, SQL, dan Python.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQGG65bOwAPj3A/profile-treasury-document-images_1920/B56Zm8q5kjJkAs-/1/1759806989614?e=1787184000&v=beta&t=Dc4rYRSUC896kL3ejTacOW4gQEUyH-7Ay8kLh9u3s3A",
+    image: "/images/certificates/cybersecurity.png",
     credentialId: "19510934840-268",
     link: "https://digitalent.kominfo.go.id/cek-sertifikat",
     skills: [
@@ -34,8 +33,7 @@ const CERTIFICATES = [
     date: "Mar 2025",
     description:
       "The UI/UX Design training introduces beginners to essential UX and UI concepts, tools, and methods. It covers user needs, user-friendly design, and visually engaging interfaces. Participants will learn the full design process, from research and ideation to prototyping and testing. Key topics include design thinking, information architecture, wireframing, visual design, usability, and accessibility. Each module blends theory with hands-on exercises to build practical skills.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQGrC0r2v29pyQ/profile-treasury-document-images_1920/B56ZX1L9KQHoAs-/1/1743575308499?e=1787184000&v=beta&t=_z0bD7Lm8F9e15kUlrloOv6z02-xdG4s9zXGBr7DHPQ",
+    image: "/images/certificates/uiux-design.png",
     credentialId: "ab009883-d6ff-41b0-991d-bf41bc3bc29a#acc.2PHw3KVF",
     link: "https://certifications.certnexus.com/ab009883-d6ff-41b0-991d-bf41bc3bc29a#acc.2PHw3KVF",
     skills: [
@@ -54,8 +52,7 @@ const CERTIFICATES = [
     date: "Dec 2024",
     description:
       "Kelas ini ditujukan untuk seorang Front-End Web Developer yang ingin mengembangkan website yang memiliki fungsionalitas lebih daripada hanya media informasi saja, sesuai dengan standar industri. Di akhir kelas, siswa dapat membuat aplikasi front-end web yang interaktif serta memiliki fitur penyimpanan menggunakan web storage.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQGhuWxcINSpRQ/profile-treasury-document-images_1920/profile-treasury-document-images_1920/1/1735689945440?e=1787184000&v=beta&t=tO58AQWhPr2-OUQO-MBcOkzXu5EOS7cUhS9wMBpY2Cc",
+    image: "/images/certificates/frontend-web.png",
     credentialId: "QLZ9VLRRMX5D",
     link: "https://www.dicoding.com/certificates/QLZ9VLRRMX5D",
     skills: [
@@ -71,8 +68,7 @@ const CERTIFICATES = [
     date: "Sep 2024",
     description:
       "Mempelajari dasar hingga teknik penting dalam Adobe Photoshop 2024 untuk mengolah dan menyempurnakan gambar secara digital, termasuk penggunaan layer, selection, masking, adjustment, retouching, serta typography dalam proses desain.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQG1eTbfmHtI2Q/profile-treasury-document-images_1920/profile-treasury-document-images_1920/1/1735690621665?e=1787184000&v=beta&t=fCgT7tHBHsjLEV5fXia40rj9Xiu8ZsL7ClOAv_L4X1Y",
+    image: "/images/certificates/photoshop.png",
     credentialId:
       "23e6c3c3094825729bba73e0a14ecc5bfae6e266631375f20609f0516a63bedd",
     link: "https://www.linkedin.com/learning/certificates/23e6c3c3094825729bba73e0a14ecc5bfae6e266631375f20609f0516a63bedd",
@@ -90,8 +86,7 @@ const CERTIFICATES = [
     date: "Jun 2024",
     description:
       "Adobe Certified Professional (ACP) is the official certification program offered by Adobe. This program is designed to validate an individual's knowledge and skills in using various Adobe Creative Cloud (CC) software. ACP certification shows the level of ability in using Adobe visual communication applications and also shows the talent a person has in communicating ideas and creativity in the form of graphic design using Adobe applications.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQFMdmsTPEA0Yw/profile-treasury-document-images_1920/profile-treasury-document-images_1920/1/1719383926021?e=1787184000&v=beta&t=zTSC3xSosG_nMi0fQE8y9e9kr2gxaKqyFwCxtvfexOw",
+    image: "/images/certificates/adobe-ai.png",
     credentialId: "xH7T-sFWP",
     link: "https://www.credly.com/badges/de2af5c6-a621-45e1-8bb3-4db027f5d499/linked_in_profile",
     skills: ["Adobe", "Illustrator", "Graphic Design"],
@@ -102,8 +97,7 @@ const CERTIFICATES = [
     date: "Feb 2024",
     description:
       "In this Specialization, learners were equipped with a set of transferable formal and conceptual tools for “making and communicating” in the field of graphic design. Learners were exposed to the fundamental skills required to make sophisticated graphic design: process, historical context, and communication through image making and typography. Learners completed a capstone project that applies the skills of each course in a finished branding project suitable for a professional portfolio.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQGsep4GM50QQA/profile-treasury-document-cover-images_1280/profile-treasury-document-cover-images_1280/0/1708413926199?e=1786881600&v=beta&t=obgJSB5z8mBTcZrt1tQ7KY-7xB0BCWilRAnttdU_OgY",
+    image: "/images/certificates/graphicdesign-coursera.png",
     credentialId: "HQ3969L9BMDR",
     link: "https://www.coursera.org/verify/specialization/HQ3969L9BMDR",
     skills: [
@@ -120,8 +114,7 @@ const CERTIFICATES = [
     date: "Jul 2023",
     description:
       "Junior Graphic Designer is a training scheme based on the Indonesian National Work Competency Standards (SKKNI). Junior Graphic Designer training participants will be able to improve their competency in designing visual communication solutions through identity, information and persuasion programs that suit the objectives of the activity provider to their audience.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D4E2DAQEA-UT-Odc4SA/profile-treasury-document-images_1920/profile-treasury-document-images_1920/1/1706838125233?e=1787184000&v=beta&t=DeuT9gHUaPmslIlZ0JejCI35YT9wP-iQ7CLqP4HwtoU",
+    image: "/images/certificates/junior-graphicdesigner.png",
     credentialId: "19968231320-34/GTA/BLSDM.Kominfo/2023",
     link: "https://digitalent.kominfo.go.id/cek-sertifikat?registrasi=19968231320-34",
     skills: [
@@ -138,8 +131,7 @@ const CERTIFICATES = [
     date: "Apr 2021",
     description:
       "Mempelajari pengembangan aplikasi web menggunakan Node.js dan Express.js, termasuk server-side programming, routing, pengelolaan data, dan pembuatan aplikasi web dinamis.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQFLFghKRf_c1Q/profile-treasury-document-images_1920/profile-treasury-document-images_1920/1/1710026773576?e=1787184000&v=beta&t=MGddwbZwpV7zAi74odrOm2wpExhZCQm1mEjSmVKqfwM",
+    image: "/images/certificates/web-nodejs.png",
     credentialId: "cd975ac2qr4idl",
     link: "https://progate.com/path_certificate/cd975ac2qr4idl",
     skills: ["HTML", "CSS", "Javascript", "Express.js", "Database"],
@@ -150,8 +142,7 @@ const CERTIFICATES = [
     date: "Apr 2021",
     description:
       "The Professional Academy (PROA) program is one of the Digital Talent Scholarship academies which aims to improve the quality of competitiveness of Indonesia's skilled human resources in the ICT field by increasing capabilities in line with industry needs. The PROA program seeks to improve and prepare for the transfer of competence of Indonesian human resources through global and national training and certification in order to create a competent, adaptive and productive Indonesian workforce.",
-    image:
-      "https://media.licdn.com/dms/image/v2/D562DAQFy2BoJCQ9m2g/profile-treasury-document-images_1920/profile-treasury-document-images_1920/1/1710025094704?e=1787184000&v=beta&t=Uv39fehkBEAuUAoyQabJnddHy6YYXPQtCLbeyWt-jxI",
+    image: "/images/certificates/html-css-js.png",
     credentialId: "970777121-70/PRO.DTS/BLSDM.KOMINFO/2021",
     link: "https://komin.fo/ProADaftarProgate",
     skills: ["HTML", "CSS", "Javascript"],
@@ -348,7 +339,7 @@ export function CertificatesSection() {
                     href={selectedCert.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
+                    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 bg-primary text-primary-foreground font-medium text-xs hover:bg-primary/90 transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Lihat Kredensial Asli
