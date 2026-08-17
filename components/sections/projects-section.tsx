@@ -1,52 +1,99 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
-import { SiGithub } from "react-icons/si";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ExternalLink,
+  Layers,
+  Globe,
+  Radio,
+  Code2,
+  Sparkles,
+  ArrowUpRight,
+  X,
+  CheckCircle2,
+  Eye,
+} from "lucide-react";
+import { SiGithub, SiYoutube } from "react-icons/si";
 import { Badge } from "@/components/ui/badge";
 
 const FADE_IN = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
+export type ProjectCategory = "all" | "web" | "ui" | "network" | "script";
+
 interface Project {
+  id: string;
   title: string;
+  category: "web" | "ui" | "network" | "script";
+  categoryLabel: string;
+  role: string;
+  highlightTag?: string;
+  featured?: boolean;
   desc: string;
+  longDesc?: string;
+  highlights: string[];
   tech: string[];
   image: string;
   link: string;
+  linkType?: "web" | "youtube" | "internal" | "none";
   github?: string;
 }
 
+const CATEGORIES: {
+  id: ProjectCategory;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
+  { id: "all", label: "Semua Proyek", icon: Layers },
+  { id: "web", label: "Web & Sistem", icon: Globe },
+  { id: "ui", label: "Design System & UI", icon: Sparkles },
+  { id: "network", label: "Infrastruktur & Jaringan", icon: Radio },
+  { id: "script", label: "Scripting & Otomasi", icon: Code2 },
+];
+
 const PROJECTS: Project[] = [
   {
+    id: "hubud-web",
     title: "Website Direktorat Jenderal Perhubungan Udara",
-    desc: "Migrasi dan pengembangan ulang website resmi Direktorat Jenderal Perhubungan Udara ke platform Laravel, disertai redesign UI/UX, pengembangan fitur, optimasi performa, dan penyempurnaan struktur informasi untuk mendukung layanan informasi publik yang lebih modern dan responsif.",
+    category: "web",
+    categoryLabel: "Web & Sistem",
+    role: "Front-End Developer & UI/UX",
+    highlightTag: "Portal Resmi Pemerintah",
+    featured: true, // Only this item is large on top-left
+    desc: "Migrasi, pengembangan dan pembangunan ulang website resmi Direktorat Jenderal Perhubungan Udara ke framework Laravel, disertai redesign UI/UX, pengembangan fitur, optimasi performa, dan penyempurnaan struktur informasi.",
+    longDesc:
+      "Website resmi Direktorat Jenderal Perhubungan Udara Kementerian Perhubungan RI merupakan portal sentral pelayanan dan informasi penerbangan nasional. Dilakukan pembaruan menyeluruh mulai dari modernisasi arsitektur ke Laravel, desain antarmuka yang ramah pengguna, optimasi kecepatan, hingga perapihan arsitektur informasi untuk jutaan masyarakat dan stakeholder penerbangan.",
+    highlights: [
+      "Migrasi & rekayasa ulang sistem ke framework Laravel 12",
+      "Redesign UI/UX responsif dengan standarisasi antarmuka DJPU",
+      "Optimasi performa, caching, dan SEO untuk jutaan pengunjung",
+      "Penyempurnaan sitemap dan struktur layanan informasi publik",
+    ],
     tech: ["Laravel", "PHP", "Alpine.js", "Tailwind CSS"],
     image: "/images/projects/hubud-web.jpg",
     link: "https://hubud.kemenhub.go.id",
+    linkType: "web",
   },
   {
-    title: "e-SOP (Electronic Standard Operational Procedure) DJPU",
-    desc: "Aplikasi E-SOP dikembangkan sebagai sistem informasi internal berbasis web untuk menggantikan proses penyusunan dan pengelolaan SOP yang sebelumnya dilakukan secara manual dan parsial menggunakan aplikasi perkantoran. Sistem menyediakan mekanisme terpusat untuk menjamin keseragaman format, metadata, struktur dokumen, pengawasan, dan ketersediaan dokumen final yang telah disahkan.",
-    tech: [
-      "Laravel",
-      "Inertia",
-      "React",
-      "PHP",
-      "Typescript",
-      "Alpine.js",
-      "Tailwind CSS",
-    ],
-    image: "/images/projects/e-sop.jpg",
-    link: "#",
-    github: "private",
-  },
-  {
+    id: "aviasihub-ui",
     title: "Aviasihub UI Components",
-    desc: "Aviasihub.site adalah UI component library yang saya buat sebagai pedoman standar tata letak visual. Platform ini menyediakan elemen antarmuka responsif siap pakai. Seluruh pengembangan web dan aplikasi di lingkungan Direktorat Jenderal Perhubungan Udara diwajibkan mengimplementasikan standarisasi dari Aviasihub.site untuk memastikan keseragaman desain, kemudahan integrasi, dan profesionalitas layanan digital.",
+    category: "ui",
+    categoryLabel: "Design System & UI",
+    role: "Lead UI/UX Designer & Creator",
+    highlightTag: "Standarisasi Tampilan",
+    featured: false,
+    desc: "UI component library dan pedoman standar tata letak visual resmi yang diwajibkan untuk seluruh pengembangan web dan aplikasi di lingkungan Ditjen Perhubungan Udara.",
+    longDesc:
+      "Aviasihub.site diciptakan sebagai Single Source of Truth bagi standarisasi visual sistem digital DJPU. Platform ini menyediakan puluhan komponen UI siap pakai, token warna, tipografi, dan panduan layout yang kompatibel lintas framework, menjamin efisiensi tim developer dan keseragaman identitas visual institusi.",
+    highlights: [
+      "Penyusunan Design System resmi untuk lingkungan Ditjen Hubud",
+      "Koleksi puluhan komponen antarmuka siap pakai yang aksesibel",
+      "Dukungan fleksibel untuk Laravel, Alpine.js, Tailwind, Bootstrap & Vanilla CSS",
+      "Standarisasi tampilan web untuk seluruh unit kerja Ditjen Perhubungan Udara",
+    ],
     tech: [
       "Laravel",
       "PHP",
@@ -57,17 +104,108 @@ const PROJECTS: Project[] = [
     ],
     image: "/images/projects/aviasihub.png",
     link: "https://aviasihub.site",
+    linkType: "web",
   },
   {
-    title: "Distribusi Jaringan Internet di Bandar Udara Bade",
-    desc: "Selain aktif menjadi Humas, saya juga terlibat dalam beberapa tugas sebagai Network Administrator di bawah pengawasan Ketua Tim Teknik, Operasi dan Pelayanan Darurat (TOKPD) dan Kepala Kantor Bandar Udara Bade. Saya bertanggung jawab untuk melakukan instalasi, troubleshooting, perbaikan infrastruktur perangkat keras dan perangkat pendukung, serta monitoring dan pemeliharaan jaringan agar konektivitas internet di Bandar Udara Bade dapat berfungsi dan berjalan dengan baik.",
-    tech: ["MikroTik", "Bandwidth Management", "DNS Server", "WinBox"],
+    id: "e-sop",
+    title: "e-SOP (Electronic SOP) DJPU",
+    category: "web",
+    categoryLabel: "Web & Sistem",
+    role: "Full Stack Developer",
+    highlightTag: "Sistem Manajemen Internal",
+    featured: false,
+    desc: "Aplikasi internal terpusat untuk menggantikan penyusunan dan pengelolaan SOP konvensional, menjamin keseragaman format, metadata, pengawasan, dan pengesahan dokumen.",
+    longDesc:
+      "Aplikasi E-SOP dikembangkan sebagai sistem informasi internal berbasis web untuk menggantikan proses penyusunan dan pengelolaan SOP yang sebelumnya dilakukan secara manual dan parsial menggunakan aplikasi perkantoran. Sistem menyediakan mekanisme terpusat untuk menjamin keseragaman format, metadata, struktur dokumen, pengawasan berjenjang, dan ketersediaan dokumen final yang telah disahkan.",
+    highlights: [
+      "Digitalisasi menyeluruh dari siklus draft hingga pengesahan SOP",
+      "Implementasi arsitektur SPA modern berbasis Inertia.js + React",
+      "Standarisasi metadata dan kontrol versi dokumen SOP antar unit kerja",
+      "Dashboard monitoring progres pengesahan dan analitik berkas",
+    ],
+    tech: [
+      "Laravel",
+      "Inertia",
+      "React",
+      "PHP",
+      "TypeScript",
+      "Alpine.js",
+      "Tailwind CSS",
+    ],
+    image: "/images/projects/e-sop.jpg",
+    link: "#",
+    linkType: "none",
+    github: "private",
+  },
+  {
+    id: "sikembang",
+    title: "SiKembang DJPU",
+    category: "web",
+    categoryLabel: "Web & Sistem",
+    role: "Web Developer",
+    highlightTag: "Sistem Kepegawaian",
+    featured: false,
+    desc: "Sistem Informasi Pengembangan Kompetensi Pegawai untuk memfasilitasi pengajuan dan verifikasi RPKP, Perjanjian Belajar, dan STB secara cepat, efisien, dan transparan.",
+    longDesc:
+      "SIKEMBANG adalah aplikasi berbasis web yang dirancang untuk mendigitalisasi proses manajemen pengembangan kompetensi pegawai di lingkungan Kementerian Perhubungan. Aplikasi ini mengotomasi alur pengajuan dan verifikasi RPKP, Perjanjian Belajar, serta penerbitan Surat Tugas Belajar (STB) beserta ekspor dokumen resmi otomatis.",
+    highlights: [
+      "Otomasi workflow pengajuan RPKP & Perjanjian Belajar",
+      "Integrasi generator PDF dinamis untuk pencetakan SK & STB resmi",
+      "Pengelolaan database terstruktur berbasis PostgreSQL",
+      "Validasi berjenjang oleh tim kepegawaian & pimpinan",
+    ],
+    tech: [
+      "Laravel",
+      "PHP",
+      "Tailwind",
+      "PostgreSQL",
+      "Alpine.js",
+      "Dompdf",
+      "Maatwebsite",
+    ],
+    image: "/images/projects/sikembang.jpg",
+    link: "https://youtu.be/fF9ZimZH2MA",
+    linkType: "youtube",
+  },
+  {
+    id: "jaringan-bade",
+    title: "Infrastruktur Jaringan Bandara Bade",
+    category: "network",
+    categoryLabel: "Infrastruktur & Jaringan",
+    role: "Network Administrator",
+    highlightTag: "Infrastruktur Bandara",
+    featured: false,
+    desc: "Instalasi, manajemen bandwidth, perbaikan infrastruktur, serta monitoring pemeliharaan konektivitas jaringan internet di Kantor UPBU Kelas III Bandar Udara Bade.",
+    longDesc:
+      "Bertanggung jawab dalam instalasi, troubleshooting, konfigurasi routing MikroTik, manajemen alokasi bandwidth, dan pemeliharaan perangkat keras jaringan demi memastikan kelancaran konektivitas operasional penerbangan dan pelayanan publik di Bandar Udara Bade, Papua.",
+    highlights: [
+      "Konfigurasi router MikroTik, Firewall, DNS Server, & QoS",
+      "Manajemen alokasi bandwidth untuk operasional & publik",
+      "Troubleshooting perangkat keras & infrastruktur kabel/nirkabel",
+      "Menjamin uptime konektivitas internet operasional bandara",
+    ],
+    tech: ["MikroTik", "Bandwidth Management", "DNS Server", "WinBox", "QoS"],
     image: "/images/projects/jaringan-bade.jpeg",
     link: "/project-bade",
+    linkType: "internal",
   },
   {
-    title: "Automation Script for Pockie Ninja Game",
-    desc: "Created a custom Tampermonkey script to automate gameplay in Pockie Ninja Online, significantly enhancing efficiency and user experience. The script automates several core in-game features.",
+    id: "pockie-ninja",
+    title: "Game Automation Engine",
+    category: "script",
+    categoryLabel: "Scripting & Otomasi",
+    role: "Script Developer",
+    highlightTag: "DOM Automation",
+    featured: false,
+    desc: "Custom browser script untuk otomasi gameplay online berbasis Tampermonkey, memanfaatkan DOM Mutation Observers untuk meningkatkan efisiensi pengguna secara realtime.",
+    longDesc:
+      "Mengembangkan skrip otomasi browser canggih menggunakan Tampermonkey dan Vanilla JavaScript murni. Skrip mengamati mutasi DOM secara realtime untuk mengeksekusi tugas-tugas repetitif secara otomatis.",
+    highlights: [
+      "Otomasi aksi repetitif in-game secara asynchronous",
+      "Pemanfaatan MutationObserver API untuk deteksi state DOM",
+      "Optimasi performa eksekusi skrip di sisi browser client",
+      "Antarmuka kontrol mini terintegrasi langsung pada game view",
+    ],
     tech: [
       "Tampermonkey",
       "JavaScript",
@@ -76,110 +214,513 @@ const PROJECTS: Project[] = [
     ],
     image: "/images/projects/pockie-ninja.jpg",
     link: "https://www.youtube.com/watch?v=2Iorid9Y7rY&list=PLKVk0YkfbJgAa7w5efLeekQDFIgMerlfq",
+    linkType: "youtube",
     github: "private",
   },
 ];
 
 export function ProjectsSection() {
+  const [activeCategory, setActiveCategory] =
+    React.useState<ProjectCategory>("all");
+  const [selectedProject, setSelectedProject] = React.useState<Project | null>(
+    null,
+  );
+
+  // Lock body scroll when modal is open
+  React.useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedProject]);
+
+  // Close modal on Escape
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedProject(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const filteredProjects = React.useMemo(() => {
+    if (activeCategory === "all") return PROJECTS;
+    return PROJECTS.filter(
+      (p) => p.category === (activeCategory as Project["category"]),
+    );
+  }, [activeCategory]);
+
   return (
     <motion.section
       id="projects"
-      className="py-12 relative"
+      className="py-16 relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
       variants={{
-        visible: { transition: { staggerChildren: 0.15 } },
+        visible: { transition: { staggerChildren: 0.1 } },
       }}
     >
-      <motion.div variants={FADE_IN} className="mb-8">
-        <h2 className="text-3xl font-bold tracking-tight">Proyek & Karya</h2>
-        <p className="text-md text-muted-foreground mt-2">
-          Beberapa proyek dan hasil karya yang telah saya kerjakan
-        </p>
+      {/* Section Header */}
+      <motion.div variants={FADE_IN} className="mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            {/* <div className="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 border border-primary/20 mb-3">
+              <Sparkles className="w-3.5 h-3.5" />
+              Showcase Portofolio
+            </div> */}
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+              Proyek & Karya Pilihan
+            </h2>
+            <p className="text-muted-foreground mt-2 max-w-3xl text-base">
+              Beberapa Proyek dan Karya yang telah saya kerjakan di instansi
+              pemerintahan dan juga personal.
+            </p>
+          </div>
+
+          <div className="text-xs font-mono text-muted-foreground border-l-2 border-primary/40 pl-3">
+            Total Proyek:{" "}
+            <span className="text-foreground font-bold">
+              {PROJECTS.length} Karya
+            </span>
+          </div>
+        </div>
+
+        {/* Category Filters */}
+        <div className="mt-8 flex flex-wrap gap-2 pt-2 border-t border-border/40">
+          {CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            const count =
+              cat.id === "all"
+                ? PROJECTS.length
+                : PROJECTS.filter(
+                    (p) => p.category === (cat.id as Project["category"]),
+                  ).length;
+            const isActive = activeCategory === cat.id;
+
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`relative px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 border cursor-pointer ${
+                  isActive
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-background/60 text-muted-foreground border-border/60 hover:text-foreground hover:border-border hover:bg-muted/30"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{cat.label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-none font-mono ${
+                    isActive
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </motion.div>
 
-      <div className="flex flex-col gap-12">
-        {PROJECTS.map((project, i) => {
-          // Alternating layout for desktop
-          const isEven = i % 2 === 0;
+      {/* Grid Projects: 1 Large card on top-left (col-span-2), all others 1 col */}
+      <motion.div
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project) => {
+            // Only the featured project in "all" view takes 2 columns
+            const isFeatured = project.featured && activeCategory === "all";
 
-          return (
+            return (
+              <motion.div
+                key={project.id}
+                layout
+                variants={FADE_IN}
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.35 }}
+                className={`group relative flex flex-col justify-between border border-border/60 bg-card/60 backdrop-blur-md hover:border-primary/60 transition-all duration-500 overflow-hidden ${
+                  isFeatured
+                    ? "md:col-span-2 lg:col-span-2 min-h-[380px]"
+                    : "col-span-1 min-h-[380px]"
+                }`}
+              >
+                {/* Accent Top Bar */}
+                <div className="h-1 w-full bg-linear-to-r from-primary/30 via-primary to-primary/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                {/* Inner Content Area */}
+                <div
+                  className={`flex flex-col ${
+                    isFeatured ? "lg:flex-row lg:items-stretch" : ""
+                  } flex-1`}
+                >
+                  {/* Image Showcase */}
+                  <div
+                    className={`relative overflow-hidden bg-muted/20 ${
+                      isFeatured
+                        ? "lg:w-1/2 min-h-[240px] lg:min-h-[340px]"
+                        : "h-52 w-full shrink-0"
+                    }`}
+                  >
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-all duration-700 filter group-hover:scale-105"
+                    />
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-linear-to-t from-background/95 via-background/30 to-transparent pointer-events-none" />
+
+                    {/* Top Badges */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
+                      <span className="text-[11px] font-semibold px-2.5 py-1 bg-background/90 backdrop-blur-md border border-border/80 text-foreground shadow-xs">
+                        {project.categoryLabel}
+                      </span>
+
+                      {project.highlightTag && (
+                        <span className="text-[10px] font-semibold px-2 py-1 bg-primary/90 text-primary-foreground backdrop-blur-md shadow-xs">
+                          {project.highlightTag}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Quick Action Preview Overlay button */}
+                    <div className="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 p-4">
+                      <button
+                        onClick={() => setSelectedProject(project)}
+                        className="px-4 py-2 text-xs font-semibold bg-background/90 text-foreground border border-border shadow-lg flex items-center gap-1.5 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        Detail Studi Kasus
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Information Area */}
+                  <div
+                    className={`p-6 flex flex-col justify-between flex-1 ${
+                      isFeatured ? "lg:w-1/2 lg:p-7" : ""
+                    }`}
+                  >
+                    <div>
+                      {/* Sub-meta: Role */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-mono text-primary font-medium tracking-wide uppercase">
+                          {project.role}
+                        </span>
+                      </div>
+
+                      {/* Title */}
+                      <h3
+                        onClick={() => setSelectedProject(project)}
+                        className="text-lg sm:text-xl font-bold tracking-tight mb-2.5 text-foreground group-hover:text-primary transition-colors duration-300 cursor-pointer flex items-start justify-between gap-2"
+                      >
+                        <span className={isFeatured ? "" : "line-clamp-2"}>
+                          {project.title}
+                        </span>
+                        <ArrowUpRight className="w-4 h-4 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-primary mt-1" />
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4">
+                        {project.desc}
+                      </p>
+
+                      {/* Bullet Highlights (For Featured View) */}
+                      {isFeatured && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                          {project.highlights.slice(0, 4).map((hl, idx) => (
+                            <div
+                              key={idx}
+                              className="text-xs text-foreground/85 flex items-center gap-1.5"
+                            >
+                              <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
+                              <span className="truncate">{hl}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      {/* Tech Stack Badges */}
+                      <div className="flex flex-wrap gap-1.5 pt-3 border-t border-border/40 mb-4">
+                        {project.tech.slice(0, isFeatured ? 6 : 4).map((t) => (
+                          <Badge
+                            key={t}
+                            variant="secondary"
+                            className="rounded-none bg-muted/50 text-[10px] sm:text-[11px] font-normal border border-border/50 px-2 py-0.5"
+                          >
+                            {t}
+                          </Badge>
+                        ))}
+                        {!isFeatured && project.tech.length > 4 && (
+                          <span className="text-[10px] text-muted-foreground font-mono self-center">
+                            +{project.tech.length - 4}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Action Links */}
+                      <div className="flex items-center gap-2">
+                        {/* Detail Modal Button */}
+                        <button
+                          onClick={() => setSelectedProject(project)}
+                          className="flex-1 inline-flex items-center justify-center px-3 py-2 text-xs font-semibold border border-border/70 bg-background/80 hover:bg-accent text-foreground transition-colors cursor-pointer"
+                        >
+                          <Eye className="w-3.5 h-3.5 mr-1.5" />
+                          Detail
+                        </button>
+
+                        {/* Live / Demo Link */}
+                        {project.link && project.link !== "#" && (
+                          <a
+                            href={project.link}
+                            target={
+                              project.linkType === "internal"
+                                ? undefined
+                                : "_blank"
+                            }
+                            rel={
+                              project.linkType === "internal"
+                                ? undefined
+                                : "noopener noreferrer"
+                            }
+                            className="flex-1 inline-flex items-center justify-center px-3 py-2 text-xs font-semibold border border-primary bg-primary/10 hover:bg-primary hover:text-primary-foreground text-primary transition-colors"
+                          >
+                            {project.linkType === "youtube" ? (
+                              <>
+                                <SiYoutube className="w-3.5 h-3.5 mr-1.5 text-red-500 group-hover:text-inherit" />
+                                Video Demo
+                              </>
+                            ) : (
+                              <>
+                                <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
+                                {project.linkType === "internal"
+                                  ? "Dokumentasi"
+                                  : "Kunjungi Web"}
+                              </>
+                            )}
+                          </a>
+                        )}
+
+                        {/* GitHub Button */}
+                        {project.github && (
+                          <a
+                            href={
+                              project.github !== "private"
+                                ? project.github
+                                : undefined
+                            }
+                            target={
+                              project.github !== "private"
+                                ? "_blank"
+                                : undefined
+                            }
+                            rel="noopener noreferrer"
+                            className={`p-2 border border-border/60 text-xs transition-colors flex items-center justify-center ${
+                              project.github === "private"
+                                ? "opacity-50 cursor-not-allowed bg-muted/20 text-muted-foreground"
+                                : "bg-muted/10 hover:bg-muted/40 text-foreground"
+                            }`}
+                            title={
+                              project.github === "private"
+                                ? "Private Repository (Internal)"
+                                : "View GitHub Repository"
+                            }
+                          >
+                            <SiGithub className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Project Detail Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+            {/* Backdrop */}
             <motion.div
-              key={i}
-              variants={FADE_IN}
-              className={`flex flex-col ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"} group bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-colors duration-500 overflow-hidden rounded-none min-h-[300px]`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="fixed inset-0 bg-background/80 backdrop-blur-md"
+            />
+
+            {/* Modal Container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.25 }}
+              className="relative w-full max-w-3xl bg-card border border-border/80 shadow-2xl overflow-hidden z-10 my-8 max-h-[90vh] flex flex-col"
             >
-              {/* Image Container */}
-              <div className="w-full lg:w-1/2 relative overflow-hidden bg-muted/10">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-64 lg:h-full object-cover filter grayscale-50 group-hover:grayscale-0 transition-all duration-700 scale-100"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-background/80 lg:bg-linear-to-r lg:from-background/20 to-transparent pointer-events-none" />
-              </div>
-
-              {/* Content Container */}
-              <div className="w-full lg:w-1/2 p-6 md:p-8 lg:p-10 flex flex-col justify-center relative">
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
-                  {project.title}
-                </h3>
-
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {project.desc}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-8 mt-auto">
-                  {project.tech.map((t) => (
-                    <Badge
-                      key={t}
-                      variant="secondary"
-                      className="rounded-none bg-secondary/30 text-xs font-normal border border-border/50 px-2.5 py-1 hover:bg-secondary/50 transition-colors"
-                    >
-                      {t}
-                    </Badge>
-                  ))}
+              {/* Modal Header Bar */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-border/60 bg-muted/20 shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 bg-primary/10 border border-primary/30 text-primary">
+                    {selectedProject.categoryLabel}
+                  </span>
+                  {selectedProject.highlightTag && (
+                    <span className="text-xs text-muted-foreground border-l border-border/60 pl-2">
+                      {selectedProject.highlightTag}
+                    </span>
+                  )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href={project.link !== "#" ? project.link : undefined}
-                    target={project.link !== "#" ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center justify-center px-5 py-2.5 border border-primary bg-primary/10 hover:bg-primary hover:text-primary-foreground text-primary text-sm font-semibold transition-all duration-300 w-full sm:w-fit ${project.link === "#" ? "opacity-50 cursor-not-allowed hover:bg-primary/10 hover:text-primary" : ""}`}
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    {project.link === "#" ? "No Live Site" : "Live Site"}
-                  </a>
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-                  {project.github && (
+              {/* Modal Scrollable Body */}
+              <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
+                {/* Big Preview Image */}
+                <div className="relative w-full h-64 sm:h-80 overflow-hidden border border-border/50 bg-muted/20">
+                  <img
+                    src={selectedProject.image}
+                    alt={selectedProject.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-background/80 via-transparent to-transparent pointer-events-none" />
+                </div>
+
+                {/* Title & Role */}
+                <div>
+                  <p className="text-xs font-mono text-primary uppercase tracking-wider mb-1">
+                    Peran: {selectedProject.role}
+                  </p>
+                  <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                    {selectedProject.title}
+                  </h3>
+                </div>
+
+                {/* Comprehensive Description */}
+                <div>
+                  <h4 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                    Tentang Proyek
+                  </h4>
+                  <p className="text-foreground/90 leading-relaxed text-sm sm:text-base">
+                    {selectedProject.longDesc || selectedProject.desc}
+                  </p>
+                </div>
+
+                {/* Key Highlights / Features */}
+                {selectedProject.highlights.length > 0 && (
+                  <div className="p-4 bg-muted/30 border border-border/50">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-primary mb-3 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Fitur & Tanggung Jawab Utama
+                    </h4>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {selectedProject.highlights.map((hl, i) => (
+                        <li
+                          key={i}
+                          className="text-xs sm:text-sm text-foreground/80 flex items-start gap-2"
+                        >
+                          <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                          <span>{hl}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Tech Stack */}
+                <div>
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2.5">
+                    Teknologi & Tools
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedProject.tech.map((t) => (
+                      <Badge
+                        key={t}
+                        variant="secondary"
+                        className="rounded-none bg-muted/60 text-xs px-2.5 py-1 border border-border/60"
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer Actions */}
+              <div className="p-4 sm:p-6 border-t border-border/60 bg-muted/20 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                <div className="text-xs text-muted-foreground">
+                  {selectedProject.github === "private" && (
+                    <span className="italic">
+                      * Repository kode berstatus privat internal organisasi.
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setSelectedProject(null)}
+                    className="px-4 py-2 text-xs font-semibold border border-border bg-background hover:bg-muted text-foreground transition-colors cursor-pointer"
+                  >
+                    Tutup
+                  </button>
+
+                  {selectedProject.link && selectedProject.link !== "#" && (
                     <a
-                      href={
-                        project.github !== "private" && project.github !== "#"
-                          ? project.github
-                          : undefined
-                      }
+                      href={selectedProject.link}
                       target={
-                        project.github !== "private" && project.github !== "#"
-                          ? "_blank"
-                          : undefined
+                        selectedProject.linkType === "internal"
+                          ? undefined
+                          : "_blank"
                       }
-                      rel="noopener noreferrer"
-                      className={`inline-flex items-center justify-center px-5 py-2.5 border border-border/50 bg-muted/5 hover:bg-muted/10 text-foreground text-sm font-semibold transition-all duration-300 w-full sm:w-fit ${project.github === "private" ? "opacity-60 cursor-not-allowed hover:bg-muted/5" : ""}`}
+                      rel={
+                        selectedProject.linkType === "internal"
+                          ? undefined
+                          : "noopener noreferrer"
+                      }
+                      className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold border border-primary bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
                     >
-                      <SiGithub className="w-4 h-4 mr-2" />
-                      {project.github === "private"
-                        ? "Private GitHub"
-                        : "GitHub Repo"}
+                      {selectedProject.linkType === "youtube" ? (
+                        <>
+                          <SiYoutube className="w-4 h-4 mr-1.5 text-red-500" />
+                          Tonton Demo Video
+                        </>
+                      ) : (
+                        <>
+                          <ExternalLink className="w-4 h-4 mr-1.5" />
+                          {selectedProject.linkType === "internal"
+                            ? "Lihat Detail Proyek"
+                            : "Buka Tautan Langsung"}
+                        </>
+                      )}
                     </a>
                   )}
                 </div>
               </div>
             </motion.div>
-          );
-        })}
-      </div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.section>
   );
 }
