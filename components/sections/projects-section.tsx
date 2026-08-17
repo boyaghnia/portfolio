@@ -284,7 +284,7 @@ export function ProjectsSection() {
             </p>
           </div>
 
-          <div className="text-xs font-mono text-muted-foreground border-l-2 border-primary/40 pl-3">
+          <div className="hidden sm:block text-xs font-mono text-muted-foreground border-l-2 border-primary/40 pl-3">
             Total Proyek:{" "}
             <span className="text-foreground font-bold">
               {PROJECTS.length} Karya
@@ -292,8 +292,8 @@ export function ProjectsSection() {
           </div>
         </div>
 
-        {/* Category Filters */}
-        <div className="mt-8 flex flex-wrap gap-2 pt-2 border-t border-border/40">
+        {/* Category Filters (Hidden on Mobile) */}
+        <div className="hidden sm:flex mt-8 flex-wrap gap-2 pt-2 border-t border-border/40">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;
             const count =
