@@ -173,7 +173,7 @@ const PROJECTS: Project[] = [
     category: "network",
     categoryLabel: "Infrastruktur & Jaringan",
     role: "Network Administrator",
-    highlightTag: "Infrastruktur Bandara",
+    highlightTag: "Infrastruktur Jaringan",
     featured: false,
     desc: "Instalasi, manajemen bandwidth, perbaikan infrastruktur, serta monitoring pemeliharaan konektivitas jaringan internet di Kantor UPBU Kelas III Bandar Udara Bade.",
     longDesc:
@@ -402,7 +402,7 @@ export function ProjectsSection() {
                         className="px-4 py-2 text-xs font-semibold bg-background/90 text-foreground border border-border shadow-lg flex items-center gap-1.5 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5" />
-                        Detail Studi Kasus
+                        Detail
                       </button>
                     </div>
                   </div>
