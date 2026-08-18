@@ -2697,13 +2697,13 @@ export default function Project3DModelPage() {
                       },
                       {
                         file: "kuriak.png",
-                        title: "Kuriak Tradisional",
-                        desc: "Instrumen bambu perkusi.",
+                        title: "Rumah Model Badak Heuay",
+                        desc: "Model rumah Sunda tradisional dengan atap badak heuay.",
                       },
                       {
                         file: "garmer.png",
-                        title: "Penataan Garmer",
-                        desc: "Setup pencahayaan studio.",
+                        title: "Gudang Garam Merah",
+                        desc: "Setup pencahayaan studio untuk rokok Gudang Garam Merah",
                       },
                     ].map((prop) => (
                       <div
