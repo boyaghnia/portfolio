@@ -239,6 +239,28 @@ const PROJECTS: Project[] = [
     link: "https://amparandjati.wordpress.com",
     linkType: "web",
   },
+  {
+    id: "3d-modelling",
+    title: "3D Modelling",
+    category: "ui",
+    categoryLabel: "3D Model",
+    role: "3D Artist",
+    highlightTag: "3D Model",
+    featured: false,
+    desc: "Project 3D Model alat musik sunda untuk melestarikan budaya sekaligus sebagai bahan pembelajaran diri sendiri. Banyak project yang terbengkalai dikarenakan banyaknya kesibukan pada kegiatan kegiatan lain.",
+    longDesc:
+      "Mengingat kurangnya asset alat musik sunda dalam bentuk 3D Model, mulai dari Tahun 2019 saya membuat 3D Model alat musik sunda untuk melestarikan budaya sekaligus sebagai bahan pembelajaran diri sendiri, selain itu terkadang saya mencoba membuat model lain. Dikarenakan banyaknya kesibukan pada kegiatan kegiatan lain maka project tersebut banyak yang terbengkalai sehingga progressnya tidak terlalu signifikan.",
+    highlights: [
+      "Mengabadikan Seni Budaya Sunda Melalui Dunia Digital",
+      "Dokumentasi alat musik tradisional Sunda dalam bentuk 3D Model",
+      "Proyek yang berkelanjutan untuk melestarikan warisan budaya Sunda",
+      "Menggabungkan teknologi digital dengan seni tradisional Sunda",
+    ],
+    tech: ["Blender 3D"],
+    image: "/images/projects/tekocendol.png",
+    link: "/project-3d-model",
+    linkType: "internal",
+  },
 ];
 
 export function ProjectsSection() {
