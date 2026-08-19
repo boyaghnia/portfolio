@@ -21,10 +21,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "https://boyaghnia.vercel.app"),
+  ),
   title: "Portfolio | Boy Aghnia Rifadhan",
   description: "Portfolio | Boy Aghnia Rifadhan",
   icons: {
     icon: "/images/misc/logo-small.png",
+  },
+  verification: {
+    google: "muFbNAm2lyPmdfPr7ZF3pV2mLQ2MEXOGkrm1ix6XU4Y",
   },
 };
 
@@ -47,7 +56,7 @@ export default function RootLayout({
         baiJamjuree.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
