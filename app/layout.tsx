@@ -57,7 +57,6 @@ export default function RootLayout({
         baiJamjuree.variable,
       )}
     >
-      <Analytics />
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
@@ -67,6 +66,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
