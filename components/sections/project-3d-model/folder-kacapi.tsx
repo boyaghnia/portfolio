@@ -66,7 +66,6 @@ export function FolderKacapi({ onOpenLightbox }: FolderKacapiProps) {
         <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg">
           <div className="px-6 py-4 bg-muted/40 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm sm:text-base">
                 Anatomi Eksterior & Bagian Utama Kacapi Indung
               </span>
@@ -184,7 +183,6 @@ export function FolderKacapi({ onOpenLightbox }: FolderKacapiProps) {
         <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg">
           <div className="px-6 py-4 bg-muted/40 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm sm:text-base">
                 Kawat Dawai, Tumpang Sari / Inang & Liang Pureut
               </span>
@@ -307,7 +305,6 @@ export function FolderKacapi({ onOpenLightbox }: FolderKacapiProps) {
         <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg">
           <div className="px-6 py-4 bg-muted/40 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm sm:text-base">
                 Skema Blueprint, Susumuran & Geometri Susu/Tumpangsari
               </span>

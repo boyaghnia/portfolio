@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Bai_Jamjuree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
 
 const baiJamjuree = Bai_Jamjuree({
   subsets: ["latin"],
@@ -56,6 +57,7 @@ export default function RootLayout({
         baiJamjuree.variable,
       )}
     >
+      <Analytics />
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"

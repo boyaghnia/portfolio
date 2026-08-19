@@ -28,7 +28,7 @@ export function LocalVideoCard({
     <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg flex flex-col justify-between">
       <div className="px-4 py-3 bg-muted/40 border-b border-border/60 flex items-center justify-between">
         <span className="font-bold text-xs sm:text-sm flex items-center gap-1.5">
-          <Film className="w-4 h-4 text-primary" /> {title}
+          {title}
         </span>
         <Badge variant="outline" className="rounded-none font-mono text-[10px]">
           {badgeText}

@@ -3,13 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  FileText,
-  Maximize2,
-  Cpu,
-  Layers,
-  Sliders,
-} from "lucide-react";
+import { FileText, Maximize2, Cpu, Layers, Sliders } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { LocalVideoCard } from "./local-video-card";
 import type { LightboxMedia } from "./types";
@@ -74,7 +68,6 @@ export function FolderTarawangsa({ onOpenLightbox }: FolderTarawangsaProps) {
         <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg">
           <div className="px-6 py-4 bg-muted/40 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm sm:text-base">
                 01 — Pengantar, Sejarah & Filosofi Tarawangsa Sumedang
               </span>
@@ -168,7 +161,6 @@ export function FolderTarawangsa({ onOpenLightbox }: FolderTarawangsaProps) {
         <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg">
           <div className="px-6 py-4 bg-muted/40 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm sm:text-base">
                 02 — Bagian-bagian pada Tarawangsa (Blueprint & Anatomi Lengkap)
               </span>
@@ -346,7 +338,6 @@ export function FolderTarawangsa({ onOpenLightbox }: FolderTarawangsaProps) {
         <div className="border border-border/60 bg-card/60 backdrop-blur-md overflow-hidden shadow-lg">
           <div className="px-6 py-4 bg-muted/40 border-b border-border/60 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-primary" />
               <span className="font-bold text-sm sm:text-base">
                 03 — Bagian-bagian pada Jentreng (Balungan Gending Tarawangsa)
               </span>
