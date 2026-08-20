@@ -16,20 +16,20 @@ import { Badge } from "@/components/ui/badge";
 import type {
   FolderCategory,
   LightboxMedia,
-} from "@/components/sections/project-3d-model/types";
+} from "./_components/types";
 import {
   YOUTUBE_VIDEOS,
   FOLDERS,
-} from "@/components/sections/project-3d-model/constants";
-import { YouTubeFacadeCard } from "@/components/sections/project-3d-model/youtube-facade-card";
-import { LightboxModal } from "@/components/sections/project-3d-model/lightbox-modal";
+} from "./_components/constants";
+import { YouTubeFacadeCard } from "./_components/youtube-facade-card";
+import { LightboxModal } from "./_components/lightbox-modal";
 
-import { FolderTarawangsa } from "@/components/sections/project-3d-model/folder-tarawangsa";
-import { FolderKacapi } from "@/components/sections/project-3d-model/folder-kacapi";
-import { FolderKarinding } from "@/components/sections/project-3d-model/folder-karinding";
-import { FolderAlatMusik } from "@/components/sections/project-3d-model/folder-alat-musik";
-import { FolderTerminalBade } from "@/components/sections/project-3d-model/folder-terminal-bade";
-import { FolderEtc } from "@/components/sections/project-3d-model/folder-etc";
+import { FolderTarawangsa } from "./_components/folder-tarawangsa";
+import { FolderKacapi } from "./_components/folder-kacapi";
+import { FolderKarinding } from "./_components/folder-karinding";
+import { FolderAlatMusik } from "./_components/folder-alat-musik";
+import { FolderTerminalBade } from "./_components/folder-terminal-bade";
+import { FolderEtc } from "./_components/folder-etc";
 
 export default function Project3DModelPage() {
   const [activeFolder, setActiveFolder] = React.useState<FolderCategory>(

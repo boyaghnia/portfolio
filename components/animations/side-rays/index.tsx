@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { Renderer, Program, Triangle, Mesh } from 'ogl';
-import './SideRays.css';
+import './side-rays.css';
 
 const hexToRgb = (hex: string) => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

@@ -22,7 +22,7 @@ const cardGLB = "/models/card.glb";
 const lanyard = "/images/misc/lanyard.png";
 
 import * as THREE from "three";
-import "./Lanyard.css";
+import "./lanyard.css";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 

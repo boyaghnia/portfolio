@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from 'react';
-import './ShapeGrid.css';
+import './shape-grid.css';
 
 const ShapeGrid = ({
   direction = 'right',

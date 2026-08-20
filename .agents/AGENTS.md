@@ -8,21 +8,37 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Component Organization Rules
-When creating or saving new components in the `components/` directory, AI MUST place them into the appropriate sub-folder based on their category:
-- `components/sections/`: For main page sections (e.g., about, contact, hero, projects).
-- `components/layout/`: For page layout and navigation elements (e.g., navbar, footer).
-- `components/animations/`: For animated UI elements, visual effects, React Bits components, and their CSS files.
-- `components/theme/`: For theme providers and theme toggles.
-- `components/ui/`: For standard UI components (e.g., shadcn/ui elements).
-DO NOT place new components directly in the root of the `components/` folder unless explicitly requested by the user.
+## 1. App Router & Page Colocation Rules (`app/`)
+- **Route Colocation Pattern**: Components, modals, types, and constants that belong **exclusively** to a specific route/page MUST be placed inside that route's private subfolder with a leading underscore `_components/` (e.g., `app/project-3d-model/_components/`, `app/project-bade/_components/`).
+- **DO NOT** place page-specific sub-components in global `components/sections/`. Keep `app/` routes modular and self-contained.
 
-## Public Directory Organization Rules
-When adding or managing assets in the `public/` directory, AI MUST place them into the appropriate sub-folder to maintain a clean structure:
-- `public/images/projects/`: For project screenshots and images. If a project has many images, create a subfolder (e.g., `public/images/projects/bade/`).
-- `public/images/profile/`: For personal profile photos.
+## 2. Global Component Organization Rules (`components/`)
+When creating or saving components in `components/`, AI MUST place them into the appropriate sub-folder based on their scope and category:
+- `components/sections/`: **STRICTLY** for top-level landing page sections (e.g., `hero-section.tsx`, `about-section.tsx`, `projects-section.tsx`, `experience-section.tsx`, `certificates-section.tsx`, `contact-section.tsx`).
+- `components/animations/`: For animated UI elements, visual effects, and shaders. **MUST use a dedicated subfolder per animation** containing `index.tsx` and its companion `.css` file in kebab-case (e.g., `components/animations/side-rays/index.tsx` + `side-rays.css`).
+- `components/layout/`: For global structural elements (e.g., `navbar.tsx`, `footer.tsx`).
+- `components/theme/`: For theme providers and theme toggles (`theme-provider.tsx`, `theme-toggle.tsx`).
+- `components/ui/`: For atomic UI primitives and shadcn/ui components (e.g., `button.tsx`, `card.tsx`, `input.tsx`, `badge.tsx`, `avatar.tsx`).
+
+DO NOT place new components directly in the root of the `components/` folder.
+
+## 3. Data Separation of Concerns (`data/`)
+- All static datasets, lists, content collections, and mock data MUST be placed in the `data/` directory with TypeScript typing:
+  - `data/projects.ts`: Project portfolio list and project category definitions.
+  - `data/certificates.ts`: Certificate and credentials data.
+  - `data/experiences.ts`: Career and education timeline data.
+  - `data/skills.tsx`: Tech stack logos, badge icons, and skill items.
+  - `data/guestbook.json`: Guestbook JSON data.
+- **DO NOT** hardcode long data arrays directly inside React JSX section files. Keep UI components focused strictly on rendering and animations.
+
+## 4. Public Directory Organization Rules (`public/`)
+When adding or managing assets in the `public/` directory, AI MUST place them into the appropriate sub-folder:
+- `public/images/projects/`: For project screenshots and images. If a project has many images, create a dedicated subfolder (e.g., `public/images/projects/bade/`, `public/images/projects/3d-model/`).
+- `public/images/certificates/`: For certificate images and verification badges.
+- `public/images/profile/`: For personal profile photos and avatars.
 - `public/images/misc/`: For miscellaneous image assets.
-- `public/models/`: For 3D models (e.g., `.glb`, `.gltf`).
-- `public/documents/`: For documents (e.g., `.pdf`).
+- `public/models/`: For 3D model files (e.g., `.glb`, `.gltf`).
+- `public/documents/`: For PDF documents and CV files (e.g., `.pdf`).
 - `public/icons/`: For SVGs and icon files.
-DO NOT place new assets directly in the root of the `public/` folder unless explicitly requested by the user.
+
+DO NOT place new assets directly in the root of the `public/` folder.
