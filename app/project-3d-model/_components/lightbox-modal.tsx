@@ -51,6 +51,8 @@ export function LightboxModal({ media, onClose }: LightboxModalProps) {
                 <video
                   src={encodeURI(media.src)}
                   controls
+                  controlsList="nodownload"
+                  onContextMenu={(e) => e.preventDefault()}
                   autoPlay
                   playsInline
                   className="w-full h-full object-contain"

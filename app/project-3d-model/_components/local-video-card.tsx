@@ -41,6 +41,8 @@ export function LocalVideoCard({
           <video
             src={encodeURI(videoSrc)}
             controls
+            controlsList="nodownload"
+            onContextMenu={(e) => e.preventDefault()}
             autoPlay
             playsInline
             className="w-full h-full object-contain bg-black"

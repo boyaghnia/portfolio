@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Bai_Jamjuree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ContentProtection } from "@/components/layout/content-protection";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <ContentProtection />
           {children}
         </ThemeProvider>
         <Analytics />
