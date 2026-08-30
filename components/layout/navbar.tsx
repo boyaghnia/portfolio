@@ -40,7 +40,7 @@ export function Navbar() {
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
+    href: string,
   ) => {
     setIsOpen(false);
     if (href.startsWith("/#")) {

@@ -381,8 +381,8 @@ export function GithubSection() {
             </div>
             <span className="text-xs text-muted-foreground">
               {data?.hasToken
-                ? "Publik & Privat (Live)"
-                : "Persentase bahasa repositori"}
+                ? "Repository Languages Percentage"
+                : "Repository Languages Percentage"}
             </span>
           </div>
 

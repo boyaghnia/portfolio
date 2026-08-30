@@ -22,11 +22,7 @@ const FADE_IN = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-import {
-  PROJECTS,
-  type Project,
-  type ProjectCategory,
-} from "@/data/projects";
+import { PROJECTS, type Project, type ProjectCategory } from "@/data/projects";
 
 const CATEGORIES: {
   id: ProjectCategory;
@@ -80,7 +76,7 @@ export function ProjectsSection() {
   return (
     <motion.section
       id="projects"
-      className="py-16 relative"
+      className="pt-16 pb-8  relative"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
