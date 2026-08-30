@@ -7,6 +7,7 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { AboutSection } from "@/components/sections/about-section";
 import { ExperienceSection } from "@/components/sections/experience-section";
 import { CertificatesSection } from "@/components/sections/certificates-section";
+import { GithubSection } from "@/components/sections/github-section";
 import { ProjectsSection } from "@/components/sections/projects-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { Footer } from "@/components/layout/footer";
@@ -39,6 +40,7 @@ export default function Portfolio() {
         <ExperienceSection />
         <CertificatesSection />
         <ProjectsSection />
+        <GithubSection />
         <ContactSection />
       </main>
 
