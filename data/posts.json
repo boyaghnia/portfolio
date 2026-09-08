@@ -1,0 +1,92 @@
+[
+  {
+    "id": "post-1",
+    "slug": "membangun-web-interaktif-3d-threejs-nextjs",
+    "title": "Membangun Pengalaman Web 3D Interaktif dengan Three.js dan Next.js",
+    "excerpt": "Panduan lengkap bagaimana mengintegrasikan React Three Fiber, Rapier Physics, dan shaders GLSL ke dalam ekosistem Next.js App Router dengan performa optimal 60 FPS.",
+    "category": "3d",
+    "tags": [
+      "Three.js",
+      "React Three Fiber",
+      "Next.js",
+      "WebGL",
+      "Shaders"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80",
+    "coverCaption": "Visualisasi 3D Shaders dan Geometri Abstrak",
+    "featured": true,
+    "published": true,
+    "publishedAt": "2026-03-01T10:00:00.000Z",
+    "updatedAt": "2026-03-01T10:00:00.000Z",
+    "readTime": 5,
+    "views": 352,
+    "likes": 49,
+    "author": {
+      "name": "Boy Aghnia Rifadhan",
+      "role": "Front-End Developer & UI/UX Specialist",
+      "avatar": "/images/profile/hero-avatar.png",
+      "handle": "@boyaghnia"
+    },
+    "content": "## Mengapa Pengalaman 3D di Web Semakin Diminati?\n\nDalam beberapa tahun terakhir, batas antara aplikasi web tradisional dan pengalaman interaktif grafis tinggi semakin kabur. Berkat kemajuan browser modern, WebGL, dan sekarang WebGPU, kita dapat menghadirkan visual 3D yang imersif langsung di browser tanpa instalasi tambahan.\n\nMenggabungkan **Next.js 16** dengan **@react-three/fiber (R3F)** memberikan kekuatan ganda: arsitektur komponen React yang deklaratif dipadukan dengan rendering Three.js berkekuatan GPU.\n\n---\n\n## 1. Arsitektur Komponen R3F di Next.js\n\nSalah satu tantangan utama dalam Next.js App Router adalah memisahkan kode yang berjalan di server (Server Components) dengan kanvas WebGL yang membutuhkan browser API (*window*, *WebGLRenderingContext*).\n\nKuncinya adalah memastikan kanvas 3D selalu berada dalam Client Component:\n\n```tsx\n\"use client\";\n\nimport { Canvas } from \"@react-three/fiber\";\nimport { OrbitControls, Float } from \"@react-three/drei\";\n\nexport function InteractiveCanvas() {\n  return (\n    <div className=\"w-full h-[500px] rounded-2xl overflow-hidden border border-border/40\">\n      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>\n        <ambientLight intensity={0.7} />\n        <directionalLight position={[10, 10, 5]} intensity={1.2} />\n        \n        <Float speed={2} rotationIntensity={1.5} floatIntensity={2}>\n          <mesh>\n            <torusKnotGeometry args={[1, 0.3, 128, 32]} />\n            <meshStandardMaterial color=\"#EAB308\" roughness={0.2} metalness={0.8} />\n          </mesh>\n        </Float>\n        \n        <OrbitControls enableZoom={false} />\n      </Canvas>\n    </div>\n  );\n}\n```\n\n> **Tips Kinerja:** Hindari membuat ulang material atau geometri di setiap render loop (`useFrame`). Buat instance di luar loop atau gunakan memoization agar garbage collector tidak memicu drop frame.\n\n---\n\n## 2. Optimasi Fisika dengan Rapier\n\nUntuk interaktivitas objek yang natural, seperti benturan dan gravitasi, library **@react-three/rapier** adalah solusi paling efisien karena ditulis dalam Rust dan dikompilasi ke WebAssembly (WASM).\n\nLangkah-langkah optimasi:\n1. Batasi jumlah RigidBody dinamis di layar.\n2. Gunakan colliders berbentuk primitif (`cuboid`, `ball`) dibanding `trimesh` yang berat komputasinya.\n3. Manfaatkan `damping` linear dan angular untuk menjaga kestabilan simulasi.\n\n---\n\n## 3. Kesimpulan\n\nMembangun web 3D bukan hanya tentang efek visual yang mencolok, melainkan tentang bagaimana menyajikan narasi produk yang lebih kaya dan menyenangkan bagi audiens. Dengan ekosistem Next.js dan Three.js, kita bisa mencapai keseimbangan sempurna antara estetika tinggi dan performa yang responsif."
+  },
+  {
+    "id": "post-2",
+    "slug": "desain-sistem-skalabel-tailwind-css-oklch",
+    "title": "Membangun Design System Skalabel dengan Tailwind CSS dan OKLCH Color Space",
+    "excerpt": "Eksplorasi mendalam mengenai implementasi ruang warna OKLCH pada Next.js dan Tailwind CSS v4 untuk menghasilkan tema gelap-terang yang konsisten dan nyaman di mata.",
+    "category": "design-system",
+    "tags": [
+      "Design System",
+      "Tailwind CSS",
+      "OKLCH",
+      "UI/UX",
+      "CSS"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
+    "coverCaption": "Arsitektur Token Warna Modern dan Komponen Antarmuka",
+    "featured": false,
+    "published": true,
+    "publishedAt": "2026-02-18T14:30:00.000Z",
+    "updatedAt": "2026-02-18T14:30:00.000Z",
+    "readTime": 4,
+    "views": 220,
+    "likes": 31,
+    "author": {
+      "name": "Boy Aghnia Rifadhan",
+      "role": "Front-End Developer & UI/UX Specialist",
+      "avatar": "/images/profile/hero-avatar.png",
+      "handle": "@boyaghnia"
+    },
+    "content": "## Mengapa Ruang Warna HSL Mulai Ditinggalkan?\n\nSelama bertahun-tahun, developer web mengandalkan format RGB dan HSL untuk mendefinisikan warna. Namun, HSL memiliki kelemahan mendasar: **perceived lightness** (kecerahan yang dipersepsikan manusia) tidak konsisten.\n\nWarna kuning dengan lightness 50% terlihat jauh lebih terang bagi mata manusia dibandingkan warna biru pada lightness yang sama. Akibatnya, rasio kontras pada tombol atau teks sering kali tidak terduga saat beralih antara tema gelap dan terang.\n\n---\n\n## Masuknya OKLCH: Ruang Warna yang Dirancang untuk Persepsi Manusia\n\n**OKLCH** menyelesaikan masalah ini dengan memisahkan:\n- **L (Lightness)**: Kecerahan seragam dari 0 (hitam mutlak) hingga 1 (putih mutlak).\n- **C (Chroma)**: Kejenuhan warna (purity).\n- **H (Hue)**: Sudut warna dalam derajat (0 - 360).\n\nPada OKLCH, dua warna dengan nilai Lightness yang sama dijamin memiliki kecerahan yang setara bagi retina mata manusia!\n\n```css\n:root {\n  --primary: oklch(0.553 0.195 38.402);\n  --primary-foreground: oklch(0.98 0.016 73.684);\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.141 0.005 285.823);\n}\n\n.dark {\n  --primary: oklch(0.47 0.157 37.304);\n  --primary-foreground: oklch(0.98 0.016 73.684);\n  --background: oklch(0.141 0.005 285.823);\n  --foreground: oklch(0.985 0 0);\n}\n```\n\n---\n\n## Keuntungan dalam Skala Proyek Besar\n\n1. **Prediktabilitas Kontras WCAG**: Membuat palet warna accessible (kontras minimal 4.5:1) menjadi rumus matematika sederhana tanpa tebak-tebak buah manggis.\n2. **Peralihan Dark Mode Mulus**: Cukup sesuaikan lightness tanpa merusak harmoni saturasi warna brand.\n3. **Kompatibilitas Penuh**: Didukung oleh seluruh browser modern dan Tailwind CSS v4 terbaru."
+  },
+  {
+    "id": "post-3",
+    "slug": "nextjs-16-fitur-baru-dan-optimasi-arsitektur",
+    "title": "Mengupas Fitur Terbaru Next.js 16 dan Praktik Terbaik Arsitektur Colocation",
+    "excerpt": "Tinjauan arsitektur App Router terbaru, pemanfaatan pola private folder _components, Server Actions teroptimasi, dan strategi caching untuk portfolio berperforma kilat.",
+    "category": "web",
+    "tags": [
+      "Next.js",
+      "React 19",
+      "Architecture",
+      "Clean Code",
+      "Performance"
+    ],
+    "coverImage": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
+    "coverCaption": "Arsitektur Kode Bersih dan Pola Colocation",
+    "featured": false,
+    "published": true,
+    "publishedAt": "2026-01-25T08:15:00.000Z",
+    "updatedAt": "2026-01-25T08:15:00.000Z",
+    "readTime": 6,
+    "views": 493,
+    "likes": 67,
+    "author": {
+      "name": "Boy Aghnia Rifadhan",
+      "role": "Front-End Developer & UI/UX Specialist",
+      "avatar": "/images/profile/hero-avatar.png",
+      "handle": "@boyaghnia"
+    },
+    "content": "## Perjalanan Evolusi Next.js\n\nNext.js terus berkembang dengan pesat, membawa perbaikan signifikan pada sistem bundling, Server Components, dan integrasi React 19.\n\nSalah satu prinsip penting yang kami terapkan di portfolio ini adalah **Pola Route Colocation**:\n\n```\napp/\n├── blog/\n│   ├── _components/          <-- Komponen eksklusif untuk blog\n│   │   ├── blog-card.tsx\n│   │   ├── post-editor.tsx\n│   │   └── admin-dashboard.tsx\n│   ├── [slug]/\n│   │   └── page.tsx\n│   ├── admin/\n│   │   └── page.tsx\n│   └── page.tsx\n```\n\nDengan menempatkan komponen privat di dalam `_components/` pada setiap folder rute:\n- Folder komponen global (`components/ui`, `components/layout`) tetap ramping dan tidak berantakan.\n- Menghindari circular dependency antar rute yang tidak berhubungan.\n- Mempermudah refactoring di kemudian hari saat suatu rute ingin diisolasi atau dihapus.\n\n---\n\n## Rekomendasi Praktik Terbaik\n\n1. **Gunakan Server Components sebagai Default**: Hanya tambahkan `\"use client\"` ketika Anda benar-benar membutuhkan state React, event listeners, atau browser APIs.\n2. **Kombinasikan Data Fetching di API Routes**: Menggunakan Next.js Route Handlers (`app/api/...`) memberikan fleksibilitas penuh untuk validasi keamanan seperti rate limiting dan spam filtering sebelum data diubah di server.\n3. **Dynamic SEO Sitemap**: Bangun `sitemap.ts` secara dinamis agar setiap artikel baru langsung terindeks oleh search engine tanpa perlu deploy ulang berkali-kali."
+  }
+]

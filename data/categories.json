@@ -1,0 +1,26 @@
+[
+  {
+    "id": "web",
+    "label": "Web Development",
+    "description": "Pengembangan front-end, Next.js, dan arsitektur web modern",
+    "color": "#FFF"
+  },
+  {
+    "id": "3d",
+    "label": "3D & Creative Tech",
+    "description": "Three.js, WebGL, animasi interaktif, dan komputasi grafis",
+    "color": "#FFF"
+  },
+  {
+    "id": "design-system",
+    "label": "Design Systems & UI",
+    "description": "Desain antarmuka, token warna, Tailwind, dan aksesibilitas",
+    "color": "#FFF"
+  },
+  {
+    "id": "tutorial",
+    "label": "Tutorial & Tips",
+    "description": "Panduan praktis, tips coding, dan penyelesaian masalah",
+    "color": "#FFF"
+  }
+]

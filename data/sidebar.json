@@ -1,0 +1,50 @@
+{
+  "widgetOrder": [
+    "search",
+    "top-posts",
+    "related-posts",
+    "categories",
+    "ad:ad-2",
+    "ad:ad-1"
+  ],
+  "showSearch": true,
+  "showTopPosts": true,
+  "topPostsTitle": "Artikel Terpopuler",
+  "topPostsCount": 4,
+  "showCategories": true,
+  "categoriesTitle": "Kategori",
+  "showRelatedPosts": true,
+  "relatedPostsTitle": "Artikel Terkait",
+  "ads": [
+    {
+      "id": "ad-1",
+      "enabled": true,
+      "type": "image",
+      "title": "Sponsor & Kolaborasi Terpilih",
+      "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
+      "targetUrl": "https://boyaghnia.my.id/#contact",
+      "altText": "Open for Software Engineering & UI/UX Collaboration",
+      "caption": "Tertarik berkolaborasi atau memasang sponsor di blog ini? Hubungi saya untuk diskusi kemitraan."
+    },
+    {
+      "id": "ad-2",
+      "enabled": true,
+      "type": "image",
+      "title": "Layanan Web 3D & Creative Tech",
+      "imageUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+      "targetUrl": "https://boyaghnia.my.id/#projects",
+      "altText": "Interactive 3D Web Development Services",
+      "caption": "Hadirkan pengalaman visual imersif dengan Three.js & React Three Fiber untuk brand dan produk Anda."
+    }
+  ],
+  "ad": {
+    "id": "ad-1",
+    "enabled": true,
+    "type": "image",
+    "title": "Sponsor & Kolaborasi Terpilih",
+    "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
+    "targetUrl": "https://boyaghnia.my.id/#contact",
+    "altText": "Open for Software Engineering & UI/UX Collaboration",
+    "caption": "Tertarik berkolaborasi atau memasang sponsor di blog ini? Hubungi saya untuk diskusi kemitraan."
+  }
+}

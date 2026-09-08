@@ -19,6 +19,7 @@ const navItems = [
   { name: "Certificates", href: "/#certificates" },
   { name: "Projects", href: "/#projects" },
   { name: "Contact", href: "/#contact" },
+  { name: "Blog", href: "/blog" },
   { name: "Guestbook", href: "/guest-book" },
 ];
 
@@ -78,7 +79,10 @@ export function Navbar() {
         <nav className="hidden md:flex items-center gap-2 lg:gap-3">
           {navItems.map((item) => {
             const isGuestbook = item.href === "/guest-book";
-            const isActive = isGuestbook && pathname === "/guest-book";
+            const isBlog = item.href === "/blog";
+            const isActive =
+              (isGuestbook && pathname === "/guest-book") ||
+              (isBlog && pathname.startsWith("/blog"));
 
             return (
               <Link
@@ -90,13 +94,13 @@ export function Navbar() {
                     ? "text-primary font-semibold bg-primary/10 border-b-2 border-primary"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 } ${
-                  isGuestbook
+                  isGuestbook || isBlog
                     ? "relative hover:text-primary transition-colors"
                     : ""
                 }`}
               >
                 {item.name}
-                {isGuestbook && (
+                {isBlog && (
                   <span className="inline-flex items-center px-1.5 py-0.2 text-[10px] font-semibold uppercase tracking-wider rounded-sm bg-primary/15 text-primary">
                     New
                   </span>
@@ -135,7 +139,10 @@ export function Navbar() {
           >
             {navItems.map((item) => {
               const isGuestbook = item.href === "/guest-book";
-              const isActive = isGuestbook && pathname === "/guest-book";
+              const isBlog = item.href === "/blog";
+              const isActive =
+                (isGuestbook && pathname === "/guest-book") ||
+                (isBlog && pathname.startsWith("/blog"));
 
               return (
                 <Link
@@ -149,7 +156,7 @@ export function Navbar() {
                   }`}
                 >
                   <span>{item.name}</span>
-                  {isGuestbook && (
+                  {isBlog && (
                     <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold uppercase tracking-wider rounded bg-primary/20 text-primary">
                       New
                     </span>
