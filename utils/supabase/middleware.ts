@@ -1,11 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
 export const createClient = async (request: NextRequest) => {
   // Create an unmodified response
   let supabaseResponse = NextResponse.next({
@@ -14,10 +9,22 @@ export const createClient = async (request: NextRequest) => {
     },
   });
 
-  const supabase = createServerClient(
-    supabaseUrl!,
-    supabaseKey!,
-    {
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_storage_SUPABASE_URL;
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.storage_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.storage_SUPABASE_ANON_KEY;
+
+  // If Supabase credentials are not configured, do not crash the website
+  if (!supabaseUrl || !supabaseKey) {
+    return supabaseResponse;
+  }
+
+  try {
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -34,11 +41,14 @@ export const createClient = async (request: NextRequest) => {
           );
         },
       },
-    }
-  );
+    });
 
-  // Refresh auth session
-  await supabase.auth.getUser();
+    // Refresh auth session
+    await supabase.auth.getUser();
+  } catch (error) {
+    // Gracefully ignore session refresh errors to prevent site downtime
+    console.error("Middleware Supabase session update error:", error);
+  }
 
   return supabaseResponse;
 };
