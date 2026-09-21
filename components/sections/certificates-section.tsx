@@ -10,7 +10,7 @@ const FADE_IN = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-import { CERTIFICATES, type Certificate } from "@/data/certificates";
+import { CERTIFICATES } from "@/data/certificates";
 
 export function CertificatesSection() {
   const [selectedCert, setSelectedCert] = React.useState<

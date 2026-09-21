@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { Film, Play, Maximize2 } from "lucide-react";
+import { Play, Maximize2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface LocalVideoCardProps {

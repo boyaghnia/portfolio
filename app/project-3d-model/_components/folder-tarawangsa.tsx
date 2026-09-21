@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FileText, Maximize2, Cpu, Layers, Sliders } from "lucide-react";
+import { Maximize2, Cpu, Layers, Sliders } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { LocalVideoCard } from "./local-video-card";
 import type { LightboxMedia } from "./types";

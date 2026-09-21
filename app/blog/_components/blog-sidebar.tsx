@@ -7,14 +7,9 @@ import { useRouter } from "next/navigation";
 import {
   Search,
   X,
-  TrendingUp,
   Eye,
   ExternalLink,
-  Sparkles,
-  Megaphone,
   ArrowUpRight,
-  FolderTree,
-  BookOpen,
   ArrowLeft,
   Clock,
 } from "lucide-react";
@@ -23,7 +18,6 @@ import {
   SidebarConfig,
   DEFAULT_SIDEBAR_CONFIG,
   DEFAULT_WIDGET_ORDER,
-  SidebarWidgetId,
   SidebarAdItem,
   BlogCategoryOption,
   BLOG_CATEGORIES,

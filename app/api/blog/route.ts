@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import {
   BlogPost,
   INITIAL_POSTS,
@@ -8,8 +6,14 @@ import {
   calculateReadTime,
   generateSlug,
 } from "@/data/blog";
-
-const DATA_FILE_PATH = path.join(process.cwd(), "data", "posts.json");
+import {
+  getDbPosts,
+  createDbPost,
+  updateDbPost,
+  deleteDbPost,
+  readLocalPosts,
+  writeLocalPosts,
+} from "@/utils/supabase/blog";
 
 export function isOwnerAuthorized(passcode?: string): boolean {
   if (!passcode) return false;
@@ -27,39 +31,18 @@ export function isOwnerAuthorized(passcode?: string): boolean {
   return validCodes.includes(passcode.trim());
 }
 
+// Backwards-compatible synchronous helpers for local files if needed
 export function readPosts(): BlogPost[] {
-  try {
-    if (!fs.existsSync(DATA_FILE_PATH)) {
-      const dir = path.dirname(DATA_FILE_PATH);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-      fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(INITIAL_POSTS, null, 2));
-      return INITIAL_POSTS;
-    }
-    const data = fs.readFileSync(DATA_FILE_PATH, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error reading posts data:", error);
-    return INITIAL_POSTS;
-  }
+  const posts = readLocalPosts();
+  return posts.length > 0 ? posts : INITIAL_POSTS;
 }
 
 export function writePosts(posts: BlogPost[]): boolean {
-  try {
-    const dir = path.dirname(DATA_FILE_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(posts, null, 2));
-    return true;
-  } catch (error) {
-    console.error("Error writing posts data:", error);
-    return false;
-  }
+  writeLocalPosts(posts);
+  return true;
 }
 
-// GET /api/blog
+// GET /api/blog - Fetch posts from Supabase database
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
@@ -68,41 +51,18 @@ export async function GET(req: Request) {
     const includeDrafts = searchParams.get("includeDrafts") === "true";
     const passcode = searchParams.get("passcode") || req.headers.get("x-admin-passcode");
 
-    const posts = readPosts();
     const isAdmin = isOwnerAuthorized(passcode || undefined);
 
-    let filtered = posts;
-
-    // Only include drafts if authorized
-    if (!includeDrafts || !isAdmin) {
-      filtered = filtered.filter((post) => post.published);
-    }
-
-    if (category && category !== "all") {
-      filtered = filtered.filter((post) => post.category === category);
-    }
-
-    if (search) {
-      filtered = filtered.filter(
-        (post) =>
-          post.title.toLowerCase().includes(search) ||
-          post.excerpt.toLowerCase().includes(search) ||
-          post.content.toLowerCase().includes(search) ||
-          post.tags.some((tag) => tag.toLowerCase().includes(search))
-      );
-    }
-
-    // Sort: newest first
-    filtered.sort(
-      (a, b) =>
-        new Date(b.publishedAt || b.updatedAt).getTime() -
-        new Date(a.publishedAt || a.updatedAt).getTime()
-    );
+    const posts = await getDbPosts({
+      category: category || undefined,
+      search: search || undefined,
+      includeDrafts: includeDrafts && isAdmin,
+    });
 
     return NextResponse.json({
       success: true,
-      posts: filtered,
-      total: filtered.length,
+      posts,
+      total: posts.length,
       isAdmin,
     });
   } catch (error) {
@@ -114,7 +74,7 @@ export async function GET(req: Request) {
   }
 }
 
-// POST /api/blog - Create new post
+// POST /api/blog - Create new post in Supabase
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -140,7 +100,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const posts = readPosts();
+    const existingPosts = await getDbPosts({ includeDrafts: true });
     const now = new Date().toISOString();
 
     // Generate unique slug
@@ -148,7 +108,7 @@ export async function POST(req: Request) {
     if (!baseSlug) baseSlug = `artikel-${Date.now()}`;
     let uniqueSlug = baseSlug;
     let counter = 1;
-    while (posts.some((p) => p.slug === uniqueSlug)) {
+    while (existingPosts.some((p) => p.slug === uniqueSlug)) {
       uniqueSlug = `${baseSlug}-${counter++}`;
     }
 
@@ -170,7 +130,7 @@ export async function POST(req: Request) {
       coverCaption: postData.coverCaption?.trim() || undefined,
       featured: Boolean(postData.featured),
       published: Boolean(postData.published),
-      publishedAt: postData.published ? now : "",
+      publishedAt: postData.published ? (postData.publishedAt || now) : "",
       updatedAt: now,
       readTime: calculateReadTime(postData.content),
       views: 0,
@@ -178,25 +138,25 @@ export async function POST(req: Request) {
       author: postData.author || DEFAULT_AUTHOR,
     };
 
-    posts.unshift(newPost);
-    writePosts(posts);
+    const created = await createDbPost(newPost);
+    const updatedList = await getDbPosts({ includeDrafts: true });
 
     return NextResponse.json({
       success: true,
-      message: "Artikel berhasil dibuat!",
-      post: newPost,
-      posts,
+      message: "Artikel berhasil dibuat di Supabase!",
+      post: created,
+      posts: updatedList,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating post:", error);
     return NextResponse.json(
-      { success: false, error: "Terjadi kesalahan server saat membuat artikel." },
+      { success: false, error: error?.message || "Terjadi kesalahan server saat membuat artikel." },
       { status: 500 }
     );
   }
 }
 
-// PUT /api/blog - Update existing post
+// PUT /api/blog - Update existing post in Supabase
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
@@ -216,17 +176,16 @@ export async function PUT(req: Request) {
       );
     }
 
-    const posts = readPosts();
-    const index = posts.findIndex((p) => p.id === postData.id);
+    const existingPosts = await getDbPosts({ includeDrafts: true });
+    const existing = existingPosts.find((p) => p.id === postData.id);
 
-    if (index === -1) {
+    if (!existing) {
       return NextResponse.json(
         { success: false, error: "Artikel tidak ditemukan." },
         { status: 404 }
       );
     }
 
-    const existing = posts[index];
     const now = new Date().toISOString();
 
     // Check slug uniqueness if changed
@@ -234,7 +193,7 @@ export async function PUT(req: Request) {
     if (slug !== existing.slug) {
       let uniqueSlug = slug;
       let counter = 1;
-      while (posts.some((p) => p.id !== existing.id && p.slug === uniqueSlug)) {
+      while (existingPosts.some((p) => p.id !== existing.id && p.slug === uniqueSlug)) {
         uniqueSlug = `${slug}-${counter++}`;
       }
       slug = uniqueSlug;
@@ -242,9 +201,7 @@ export async function PUT(req: Request) {
 
     const isNewlyPublished = !existing.published && postData.published;
 
-    const updatedPost: BlogPost = {
-      ...existing,
-      ...postData,
+    const updates: Partial<BlogPost> = {
       slug,
       title: postData.title?.trim() || existing.title,
       excerpt:
@@ -260,32 +217,34 @@ export async function PUT(req: Request) {
       coverCaption: postData.coverCaption?.trim() ?? existing.coverCaption,
       featured: typeof postData.featured === "boolean" ? postData.featured : existing.featured,
       published: typeof postData.published === "boolean" ? postData.published : existing.published,
-      publishedAt: isNewlyPublished
-        ? now
-        : existing.publishedAt || (postData.published ? now : ""),
+      publishedAt: postData.publishedAt
+        ? postData.publishedAt
+        : isNewlyPublished
+          ? now
+          : existing.publishedAt || (postData.published ? now : ""),
       updatedAt: now,
       readTime: calculateReadTime(postData.content || existing.content),
     };
 
-    posts[index] = updatedPost;
-    writePosts(posts);
+    const updated = await updateDbPost(postData.id, updates);
+    const updatedList = await getDbPosts({ includeDrafts: true });
 
     return NextResponse.json({
       success: true,
-      message: "Artikel berhasil diperbarui!",
-      post: updatedPost,
-      posts,
+      message: "Artikel berhasil diperbarui di Supabase!",
+      post: updated,
+      posts: updatedList,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating post:", error);
     return NextResponse.json(
-      { success: false, error: "Terjadi kesalahan server saat memperbarui artikel." },
+      { success: false, error: error?.message || "Terjadi kesalahan server saat memperbarui artikel." },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/blog - Delete post
+// DELETE /api/blog - Delete post from Supabase
 export async function DELETE(req: Request) {
   try {
     const body = await req.json();
@@ -305,27 +264,18 @@ export async function DELETE(req: Request) {
       );
     }
 
-    const posts = readPosts();
-    const updated = posts.filter((p) => p.id !== id);
-
-    if (updated.length === posts.length) {
-      return NextResponse.json(
-        { success: false, error: "Artikel tidak ditemukan." },
-        { status: 404 }
-      );
-    }
-
-    writePosts(updated);
+    await deleteDbPost(id);
+    const updatedList = await getDbPosts({ includeDrafts: true });
 
     return NextResponse.json({
       success: true,
-      message: "Artikel berhasil dihapus!",
-      posts: updated,
+      message: "Artikel berhasil dihapus dari Supabase!",
+      posts: updatedList,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error deleting post:", error);
     return NextResponse.json(
-      { success: false, error: "Terjadi kesalahan server saat menghapus artikel." },
+      { success: false, error: error?.message || "Terjadi kesalahan server saat menghapus artikel." },
       { status: 500 }
     );
   }

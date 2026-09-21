@@ -9,7 +9,7 @@ import {
   useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -21,6 +21,7 @@ const navItems = [
   { name: "Contact", href: "/#contact" },
   { name: "Blog", href: "/blog" },
   { name: "Guestbook", href: "/guest-book" },
+  { name: "Donasi", href: "/donasi" },
 ];
 
 export function Navbar() {

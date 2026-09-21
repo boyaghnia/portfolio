@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import { Heart, Share2, Check, Copy, MessageCircle } from "lucide-react";
+import { Heart, Check, Copy, MessageCircle } from "lucide-react";
 import { FaXTwitter, FaLinkedin } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 

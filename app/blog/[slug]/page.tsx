@@ -3,19 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { useParams } from "next/navigation";
 import {
-  ArrowLeft,
   Calendar,
   Clock,
   Eye,
-  Share2,
-  Sparkles,
   ChevronRight,
   BookOpen,
-  User,
-  ArrowRight,
 } from "lucide-react";
 
 import { SideRays } from "@/components/animations/side-rays";
@@ -39,7 +33,6 @@ import { AdminAuthModal } from "../_components/admin-auth-modal";
 
 export default function BlogPostDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params?.slug as string;
 
   const [post, setPost] = React.useState<BlogPost | null>(null);
@@ -138,19 +131,6 @@ export default function BlogPostDetailPage() {
     fetchSidebarAndCategories();
   }, [slug]);
 
-  // Related posts
-  const relatedPosts = React.useMemo(() => {
-    if (!post) return [];
-    return allPosts
-      .filter((p) => p.id !== post.id && p.published)
-      .filter(
-        (p) =>
-          p.category === post.category ||
-          p.tags.some((t) => post.tags.includes(t)),
-      )
-      .slice(0, 2);
-  }, [post, allPosts]);
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -240,7 +220,7 @@ export default function BlogPostDetailPage() {
             <span>•</span>
             <div className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              <span>{formatBlogDate(post.publishedAt || post.updatedAt)}</span>
+              <span>{formatBlogDate(post.publishedAt || post.updatedAt, true)}</span>
             </div>
             <span>•</span>
             <div className="flex items-center gap-1">

@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import {
-  FolderTree,
   Plus,
   Edit3,
   Trash2,
@@ -43,7 +42,6 @@ export function CategoryManager({
 }: CategoryManagerProps) {
   const [categories, setCategories] = React.useState<BlogCategoryOption[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [totalPosts, setTotalPosts] = React.useState(0);
 
   // Modal / Form state
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -74,7 +72,6 @@ export function CategoryManager({
       const data = await res.json();
       if (data.success && Array.isArray(data.categories)) {
         setCategories(data.categories);
-        setTotalPosts(data.totalPosts || 0);
       }
     } catch (err) {
       console.error("Gagal memuat kategori:", err);

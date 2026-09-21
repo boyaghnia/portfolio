@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Sparkles, FileText, Maximize2, BookOpen } from "lucide-react";
+import { Maximize2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { LightboxMedia } from "./types";
 

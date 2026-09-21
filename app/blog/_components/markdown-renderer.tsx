@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { marked } from "marked";
-import { Check, Copy } from "lucide-react";
 
 interface MarkdownRendererProps {
   content: string;
@@ -11,7 +10,6 @@ interface MarkdownRendererProps {
 
 export function MarkdownRenderer({ content, className = "" }: MarkdownRendererProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [copiedIndex, setCopiedIndex] = React.useState<number | null>(null);
 
   // Configure marked options
   const htmlContent = React.useMemo(() => {
@@ -20,10 +18,11 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
     const renderer = new marked.Renderer();
 
     // Custom heading renderer to add id for anchors and Table of Contents
-    renderer.heading = ({ tokens, depth }) => {
+    renderer.heading = function ({ tokens, depth }) {
       const text = tokens.map((t) => ("text" in t ? t.text : "")).join("");
       const id = text
         .toLowerCase()
+        .replace(/[*_`~[\]]/g, "")
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-");
 
@@ -34,32 +33,35 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
           ? "text-xl sm:text-2xl font-semibold tracking-tight text-foreground mt-8 mb-3 scroll-mt-24 flex items-center group"
           : "text-lg font-semibold text-foreground mt-6 mb-2";
 
+      const parsedHeading = this.parser.parseInline(tokens);
+
       return `<h${depth} id="${id}" class="${classes}">
-        <span>${text}</span>
+        <span>${parsedHeading}</span>
         <a href="#${id}" class="ml-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity text-sm font-normal">#</a>
       </h${depth}>`;
     };
 
     // Custom link renderer with security attributes
-    renderer.link = ({ href, title, text }) => {
+    renderer.link = function ({ href, title, tokens }) {
+      const parsedText = this.parser.parseInline(tokens);
       const isExternal = href?.startsWith("http");
       const attrs = isExternal
         ? 'target="_blank" rel="noopener noreferrer"'
         : "";
       return `<a href="${href}" ${attrs} ${
         title ? `title="${title}"` : ""
-      } class="text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary font-medium transition-colors">${text}</a>`;
+      } class="text-primary underline underline-offset-4 decoration-primary/40 hover:decoration-primary font-medium transition-colors">${parsedText}</a>`;
     };
 
     // Custom blockquote renderer
-    renderer.blockquote = ({ text }) => {
+    renderer.blockquote = function ({ tokens }) {
       return `<blockquote class="border-l-4 border-primary pl-4 py-2 my-6 bg-primary/5 rounded-none text-muted-foreground italic">
-        ${text}
+        ${this.parser.parse(tokens)}
       </blockquote>`;
     };
 
     // Custom code block renderer
-    renderer.code = ({ text, lang }) => {
+    renderer.code = function ({ text, lang }) {
       return `<div class="relative group my-6 overflow-hidden rounded-none border border-border/60 bg-muted/40 dark:bg-[#0d1117] shadow-lg">
         <div class="flex items-center justify-between px-4 py-2 border-b border-border/40 bg-muted/70 dark:bg-[#161b22] text-xs font-mono text-muted-foreground">
           <span>${lang || "text"}</span>
@@ -72,38 +74,55 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
     };
 
     // Custom inline code
-    renderer.codespan = ({ text }) => {
-      return `<code class="px-1.5 py-0.5 rounded-none bg-muted font-mono text-xs sm:text-sm text-primary font-medium border border-border/50">${text}</code>`;
+    renderer.codespan = function ({ text }) {
+      return `<code class="px-1.5 py-0.5 rounded-sm bg-muted font-mono text-xs sm:text-sm text-primary font-medium border border-border/50">${text}</code>`;
+    };
+
+    // Custom strong (bold text: **bold**)
+    renderer.strong = function ({ tokens }) {
+      return `<strong class="font-bold text-foreground">${this.parser.parseInline(tokens)}</strong>`;
+    };
+
+    // Custom em (italic text: *italic*)
+    renderer.em = function ({ tokens }) {
+      return `<em class="italic text-foreground/95">${this.parser.parseInline(tokens)}</em>`;
+    };
+
+    // Custom listitem
+    renderer.listitem = function (item) {
+      return `<li class="leading-relaxed pl-1">${this.parser.parse(item.tokens)}</li>`;
     };
 
     // Custom list styling
-    renderer.list = ({ items, ordered }) => {
+    renderer.list = function ({ items, ordered, start }) {
       const tag = ordered ? "ol" : "ul";
       const listClass = ordered
         ? "list-decimal list-outside pl-6 my-4 space-y-2 text-foreground/90 text-base"
         : "list-disc list-outside pl-6 my-4 space-y-2 text-foreground/90 text-base";
-      const inner = items
-        .map((item) => `<li class="leading-relaxed pl-1">${item.text}</li>`)
-        .join("");
-      return `<${tag} class="${listClass}">${inner}</${tag}>`;
+      let inner = "";
+      for (let i = 0; i < items.length; i++) {
+        inner += this.listitem(items[i]);
+      }
+      const startAttr = ordered && start && start !== 1 ? ` start="${start}"` : "";
+      return `<${tag}${startAttr} class="${listClass}">${inner}</${tag}>`;
     };
 
     // Custom paragraph
-    renderer.paragraph = ({ text }) => {
-      return `<p class="text-base sm:text-lg text-foreground/90 leading-relaxed my-4">${text}</p>`;
+    renderer.paragraph = function ({ tokens }) {
+      return `<p class="text-base sm:text-lg text-foreground/90 leading-relaxed my-4">${this.parser.parseInline(tokens)}</p>`;
     };
 
     // Custom horizontal rule
-    renderer.hr = () => {
+    renderer.hr = function () {
       return `<hr class="my-8 border-border/40" />`;
     };
 
     // Custom table
-    renderer.table = ({ header, rows }) => {
+    renderer.table = function ({ header, rows }) {
       const headerHtml = header
         .map(
           (cell) =>
-            `<th class="px-4 py-2 border-b border-border/60 font-semibold text-left text-sm text-foreground bg-muted/50">${cell.text}</th>`
+            `<th class="px-4 py-2 border-b border-border/60 font-semibold text-left text-sm text-foreground bg-muted/50">${this.parser.parseInline(cell.tokens)}</th>`
         )
         .join("");
       const rowsHtml = rows
@@ -112,7 +131,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
             `<tr class="border-b border-border/30 hover:bg-muted/20 transition-colors">${row
               .map(
                 (cell) =>
-                  `<td class="px-4 py-2.5 text-sm text-foreground/90">${cell.text}</td>`
+                  `<td class="px-4 py-2.5 text-sm text-foreground/90">${this.parser.parseInline(cell.tokens)}</td>`
               )
               .join("")}</tr>`
         )
@@ -131,7 +150,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
     if (!containerRef.current) return;
     const preBlocks = containerRef.current.querySelectorAll("pre");
 
-    preBlocks.forEach((pre, index) => {
+    preBlocks.forEach((pre) => {
       const parent = pre.parentElement;
       if (!parent || parent.querySelector(".copy-btn")) return;
 
@@ -146,11 +165,9 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
       btn.addEventListener("click", () => {
         const codeText = pre.querySelector("code")?.innerText || pre.innerText;
         navigator.clipboard.writeText(codeText);
-        setCopiedIndex(index);
         btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> <span class="text-emerald-500">Tersalin!</span>`;
         setTimeout(() => {
           btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Salin`;
-          setCopiedIndex(null);
         }, 2000);
       });
 

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles } from "lucide-react";
-import { BlogPost, INITIAL_POSTS } from "@/data/blog";
+import { BlogPost } from "@/data/blog";
 import { AdminAuthModal } from "../_components/admin-auth-modal";
 import { AdminDashboard } from "../_components/admin-dashboard";
 import { PostEditor } from "../_components/post-editor";

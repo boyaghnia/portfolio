@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  Sparkles,
   Calendar,
   Clock,
   ArrowRight,

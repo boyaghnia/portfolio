@@ -22,13 +22,17 @@ import {
   Quote,
   Minus,
   Sparkles,
-  Check,
-  RotateCcw,
   Clock,
-  FileText,
-  HelpCircle,
 } from "lucide-react";
-import { BlogPost, BlogCategoryOption, BLOG_CATEGORIES, calculateReadTime, generateSlug } from "@/data/blog";
+import {
+  BlogPost,
+  BlogCategoryOption,
+  BLOG_CATEGORIES,
+  calculateReadTime,
+  generateSlug,
+  toWibDateTimeLocal,
+  wibDateTimeToISO,
+} from "@/data/blog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -115,12 +119,15 @@ export function PostEditor({
   const [coverImage, setCoverImage] = React.useState(
     initialPost?.coverImage || COVER_PRESETS[0].url
   );
-  const [coverCaption, setCoverCaption] = React.useState(
+  const [coverCaption] = React.useState(
     initialPost?.coverCaption || ""
   );
   const [featured, setFeatured] = React.useState(initialPost?.featured || false);
   const [published, setPublished] = React.useState(
     initialPost?.published !== undefined ? initialPost.published : true
+  );
+  const [publishedAt, setPublishedAt] = React.useState<string>(() =>
+    toWibDateTimeLocal(initialPost?.publishedAt)
   );
   const [content, setContent] = React.useState(
     initialPost?.content ||
@@ -215,6 +222,7 @@ export function PostEditor({
       coverCaption: coverCaption.trim() || undefined,
       featured,
       published: isPublishing,
+      publishedAt: isPublishing ? wibDateTimeToISO(publishedAt) : "",
       content,
       readTime,
     };
@@ -567,6 +575,21 @@ export function PostEditor({
               />
               <span className="font-semibold">Publikasikan Langsung ke Pembaca</span>
             </label>
+
+            {published && (
+              <div className="flex items-center gap-2">
+                <span className="text-muted-foreground flex items-center gap-1.5 font-mono text-[11px]">
+                  <Clock className="w-3.5 h-3.5 text-primary" />
+                  Waktu Publikasi (WIB):
+                </span>
+                <input
+                  type="datetime-local"
+                  value={publishedAt}
+                  onChange={(e) => setPublishedAt(e.target.value)}
+                  className="px-2 py-1 rounded-none border border-border/60 bg-muted/30 text-xs font-mono text-foreground focus:outline-none focus:border-primary cursor-pointer"
+                />
+              </div>
+            )}
           </div>
         </div>
 

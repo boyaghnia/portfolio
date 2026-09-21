@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { readPosts, writePosts } from "../route";
+import {
+  getDbPostBySlug,
+  incrementDbPostViews,
+  incrementDbPostLikes,
+} from "@/utils/supabase/blog";
 
 // Simple in-memory throttle to prevent rapid view inflation
 const viewThrottle = new Map<string, number>();
@@ -10,17 +14,14 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const posts = readPosts();
-    const postIndex = posts.findIndex((p) => p.slug === slug);
+    const post = await getDbPostBySlug(slug);
 
-    if (postIndex === -1) {
+    if (!post) {
       return NextResponse.json(
         { success: false, error: "Artikel tidak ditemukan." },
         { status: 404 }
       );
     }
-
-    const post = posts[postIndex];
 
     // Check client IP for throttling view increments (max once per 5 minutes per IP per post)
     const forwarded = req.headers.get("x-forwarded-for");
@@ -31,9 +32,8 @@ export async function GET(
 
     if (now - lastViewed > 5 * 60 * 1000) {
       viewThrottle.set(throttleKey, now);
+      await incrementDbPostViews(post.id);
       post.views = (post.views || 0) + 1;
-      posts[postIndex] = post;
-      writePosts(posts);
     }
 
     return NextResponse.json({
@@ -41,7 +41,7 @@ export async function GET(
       post,
     });
   } catch (error) {
-    console.error("Error fetching single post:", error);
+    console.error("Error fetching single post from Supabase:", error);
     return NextResponse.json(
       { success: false, error: "Gagal mengambil data artikel." },
       { status: 500 }
@@ -58,26 +58,21 @@ export async function POST(
     const body = await req.json();
     const { action } = body;
 
-    const posts = readPosts();
-    const postIndex = posts.findIndex((p) => p.slug === slug);
+    const post = await getDbPostBySlug(slug);
 
-    if (postIndex === -1) {
+    if (!post) {
       return NextResponse.json(
         { success: false, error: "Artikel tidak ditemukan." },
         { status: 404 }
       );
     }
 
-    const post = posts[postIndex];
-
     if (action === "like") {
-      post.likes = (post.likes || 0) + 1;
-      posts[postIndex] = post;
-      writePosts(posts);
+      const newLikes = await incrementDbPostLikes(post.id);
 
       return NextResponse.json({
         success: true,
-        likes: post.likes,
+        likes: newLikes,
       });
     }
 
@@ -86,7 +81,7 @@ export async function POST(
       { status: 400 }
     );
   } catch (error) {
-    console.error("Error updating single post interaction:", error);
+    console.error("Error updating single post interaction in Supabase:", error);
     return NextResponse.json(
       { success: false, error: "Gagal memproses interaksi artikel." },
       { status: 500 }

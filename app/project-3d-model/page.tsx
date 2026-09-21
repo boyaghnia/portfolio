@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { ArrowLeft, Layers, Folder, Sliders } from "lucide-react";
 import { SiBlender, SiYoutube } from "react-icons/si";
 

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Plane, Building2, Maximize2 } from "lucide-react";
+import { Maximize2 } from "lucide-react";
 import type { LightboxMedia } from "./types";
 
 interface FolderTerminalBadeProps {

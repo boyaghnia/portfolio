@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
   Search,
@@ -17,10 +16,7 @@ import {
   ExternalLink,
   LogOut,
   Sparkles,
-  ArrowUpRight,
-  Filter,
   Sliders,
-  Megaphone,
   FolderTree,
 } from "lucide-react";
 import { BlogPost, formatBlogDate } from "@/data/blog";

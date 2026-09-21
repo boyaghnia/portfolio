@@ -28,7 +28,6 @@ export default function BlogIndexPage() {
   );
   const [categories, setCategories] =
     React.useState<BlogCategoryOption[]>(BLOG_CATEGORIES);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("all");
   const [showAuthModal, setShowAuthModal] = React.useState(false);
@@ -56,8 +55,6 @@ export default function BlogIndexPage() {
       }
     } catch (error) {
       console.error("Failed to load posts from API:", error);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
@@ -158,12 +155,7 @@ export default function BlogIndexPage() {
 
       <main className="container mx-auto px-4 pb-20 max-w-7xl relative z-10">
         {/* Hero Section with Title & Category Pills */}
-        <BlogHero
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          categories={categories}
-          totalPosts={filteredPosts.length}
-        />
+        <BlogHero />
 
         {/* Featured Post (Full width across max-w-7xl, above articles & sidebar) */}
         {featuredPost && (

@@ -4,38 +4,23 @@ import * as React from "react";
 import Image from "next/image";
 import {
   Megaphone,
-  Search,
-  TrendingUp,
   Save,
   Check,
   ExternalLink,
-  Sparkles,
-  Eye,
-  Sliders,
-  Image as ImageIcon,
-  Code2,
   RefreshCw,
-  FolderTree,
-  BookOpen,
   ArrowUp,
   ArrowDown,
   Plus,
   Trash2,
   Edit3,
   X,
-  Layers,
-  Monitor,
-  FileText,
   AlertCircle,
-  ToggleLeft,
-  ToggleRight,
   ArrowUpRight,
 } from "lucide-react";
 import {
   SidebarConfig,
   DEFAULT_SIDEBAR_CONFIG,
   DEFAULT_WIDGET_ORDER,
-  SidebarWidgetId,
   SidebarAdItem,
   BlogPost,
   INITIAL_POSTS,
@@ -203,10 +188,7 @@ export function SidebarSettingsEditor({
   }, []);
 
   // Save helper to persist config directly to server
-  const persistConfig = async (
-    targetConfig: SidebarConfig,
-    customSuccessMessage?: string,
-  ) => {
+  const persistConfig = async (targetConfig: SidebarConfig) => {
     setIsSaving(true);
     setErrorMessage(null);
     setSaveSuccess(false);
@@ -400,12 +382,7 @@ export function SidebarSettingsEditor({
     setEditingAd(null);
 
     // Save directly to server so changes are immediately persisted!
-    await persistConfig(
-      updatedConfig,
-      editingAd
-        ? "Materi iklan berhasil diperbarui dan disimpan!"
-        : "Iklan baru berhasil ditambahkan dan disimpan!",
-    );
+    await persistConfig(updatedConfig);
   };
 
   const isWidgetActive = (widgetId: string): boolean => {
@@ -555,7 +532,6 @@ export function SidebarSettingsEditor({
             <div className="space-y-2">
               {fullWidgetOrder.map((widgetId, index) => {
                 const info = getWidgetDisplayInfo(widgetId);
-                const Icon = info.icon;
 
                 return (
                   <div

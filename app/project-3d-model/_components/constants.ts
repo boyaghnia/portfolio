@@ -1,13 +1,4 @@
-import {
-  Film,
-  Sparkles,
-  Box,
-  Music2,
-  Plane,
-  FolderGit2,
-  Folder,
-  FolderOpen,
-} from "lucide-react";
+import { FolderOpen } from "lucide-react";
 import type { YouTubeVideo, FolderTabConfig } from "./types";
 
 export const YOUTUBE_VIDEOS: YouTubeVideo[] = [

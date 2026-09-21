@@ -3,10 +3,8 @@
 import * as React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import LogoLoop from "@/components/animations/logo-loop";
 import PixelTransition from "@/components/animations/pixel-transition";
-import { PenTool, AppWindow } from "lucide-react";
 import { TECH_LOGOS } from "@/data/skills";
 
 const FADE_IN = {
