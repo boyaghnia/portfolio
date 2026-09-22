@@ -76,7 +76,7 @@ export function DonationFaq() {
             Tinggalkan Pesan di Buku Tamu!
           </h3>
           <p className="text-xs text-muted-foreground mt-1 max-w-xl">
-            Setelah berdonasi atau membaca tutorial, Anda bisa meninggalkan
+            Setelah memberikan dukungan (Buy Me a Coffee) atau membaca tutorial, Anda bisa meninggalkan
             pesan semangat atau feedback hangat di halaman Buku Tamu website
             ini.
           </p>

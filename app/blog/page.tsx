@@ -48,7 +48,7 @@ export default function BlogIndexPage() {
   // Load published posts from API
   const loadPosts = React.useCallback(async () => {
     try {
-      const res = await fetch("/api/blog");
+      const res = await fetch("/api/blog", { cache: "no-store" });
       const data = await res.json();
       if (res.ok && data.success && Array.isArray(data.posts)) {
         setPosts(data.posts);
@@ -74,7 +74,7 @@ export default function BlogIndexPage() {
   // Load dynamic categories from API
   const loadCategories = React.useCallback(async () => {
     try {
-      const res = await fetch("/api/blog/categories");
+      const res = await fetch("/api/blog/categories", { cache: "no-store" });
       const data = await res.json();
       if (res.ok && data.success && Array.isArray(data.categories)) {
         setCategories([

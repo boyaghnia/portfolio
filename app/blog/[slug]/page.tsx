@@ -65,7 +65,7 @@ export default function BlogPostDetailPage() {
     const fetchPost = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/blog/${slug}`);
+        const res = await fetch(`/api/blog/${slug}`, { cache: "no-store" });
         const data = await res.json();
 
         if (res.ok && data.success && data.post) {
@@ -94,7 +94,7 @@ export default function BlogPostDetailPage() {
 
     const fetchAllPosts = async () => {
       try {
-        const res = await fetch("/api/blog");
+        const res = await fetch("/api/blog", { cache: "no-store" });
         const data = await res.json();
         if (res.ok && data.success && Array.isArray(data.posts)) {
           setAllPosts(data.posts);

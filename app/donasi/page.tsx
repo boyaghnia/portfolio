@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
 
-import { DonasiHero } from "./_components/donasi-hero";
 import { DonationMethods } from "./_components/donation-methods";
 import { DonationFaq } from "./_components/donation-faq";
 import { QrisModal } from "./_components/qris-modal";
@@ -33,10 +32,7 @@ export default function DonasiPage() {
       <Navbar />
 
       <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-6xl">
-        {/* 1. Hero Header */}
-        <DonasiHero />
-
-        {/* 2. Metode Pembayaran & Kanal Donasi (QRIS, Saweria, Trakteer, Bank Transfer) */}
+        {/* 2. Metode Pembayaran & Kanal Dukungan (QRIS, Saweria, PayPal) */}
         <DonationMethods onOpenQrisModal={() => setIsQrisModalOpen(true)} />
 
         {/* 5. Pertanyaan Umum & Ajak ke Buku Tamu */}

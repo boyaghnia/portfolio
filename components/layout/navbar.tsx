@@ -9,7 +9,7 @@ import {
   useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Heart, Coffee } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -21,7 +21,7 @@ const navItems = [
   { name: "Contact", href: "/#contact" },
   { name: "Blog", href: "/blog" },
   { name: "Guestbook", href: "/guest-book" },
-  { name: "Donasi", href: "/donasi" },
+  { name: "Buy Me a Coffee", href: "/donasi" },
 ];
 
 export function Navbar() {
@@ -81,9 +81,36 @@ export function Navbar() {
           {navItems.map((item) => {
             const isGuestbook = item.href === "/guest-book";
             const isBlog = item.href === "/blog";
+            const isDonasi = item.href === "/donasi";
             const isActive =
               (isGuestbook && pathname === "/guest-book") ||
-              (isBlog && pathname.startsWith("/blog"));
+              (isBlog && pathname.startsWith("/blog")) ||
+              (isDonasi && pathname === "/donasi");
+
+            if (isDonasi) {
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  title="Buy Me a Coffee"
+                  aria-label="Buy Me a Coffee"
+                  className={`px-2.5 py-1.5 transition-all rounded-none flex items-center justify-center group ${
+                    isActive
+                      ? "text-rose-500 bg-rose-500/10 border-b-2 border-rose-500"
+                      : "text-rose-500/75 hover:text-rose-500 hover:bg-rose-500/10"
+                  }`}
+                >
+                  <Coffee
+                    className={`w-4 h-4 transition-all duration-300 ${
+                      isActive
+                        ? "fill-rose-500 text-rose-500 scale-110"
+                        : "fill-rose-500/25 text-rose-500 group-hover:fill-rose-500 group-hover:scale-115"
+                    }`}
+                  />
+                </Link>
+              );
+            }
 
             return (
               <Link
@@ -141,9 +168,11 @@ export function Navbar() {
             {navItems.map((item) => {
               const isGuestbook = item.href === "/guest-book";
               const isBlog = item.href === "/blog";
+              const isDonasi = item.href === "/donasi";
               const isActive =
                 (isGuestbook && pathname === "/guest-book") ||
-                (isBlog && pathname.startsWith("/blog"));
+                (isBlog && pathname.startsWith("/blog")) ||
+                (isDonasi && pathname === "/donasi");
 
               return (
                 <Link
@@ -152,11 +181,30 @@ export function Navbar() {
                   onClick={(e) => handleNavClick(e, item.href)}
                   className={`text-base font-medium px-4 py-2.5 transition-all rounded-none flex items-center justify-between ${
                     isActive
-                      ? "text-primary font-semibold bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      ? isDonasi
+                        ? "text-rose-500 font-semibold bg-rose-500/10"
+                        : "text-primary font-semibold bg-primary/10"
+                      : isDonasi
+                        ? "text-rose-500 hover:text-rose-400 hover:bg-rose-500/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   }`}
                 >
-                  <span>{item.name}</span>
+                  <span className="flex items-center gap-2">
+                    {isDonasi ? (
+                      <>
+                        <Heart
+                          className={`w-4 h-4 ${
+                            isActive
+                              ? "text-rose-500 fill-rose-500"
+                              : "text-rose-500 fill-rose-500/40"
+                          }`}
+                        />
+                        <span>Buy Me a Coffee</span>
+                      </>
+                    ) : (
+                      <span>{item.name}</span>
+                    )}
+                  </span>
                   {isBlog && (
                     <span className="inline-flex items-center px-2 py-0.5 text-xs font-semibold uppercase tracking-wider rounded bg-primary/20 text-primary">
                       New
