@@ -172,9 +172,6 @@ export const DEFAULT_AUTHOR: BlogAuthor = {
 
 export const BLOG_CATEGORIES: BlogCategoryOption[] = [
   { id: "all", label: "Semua Topik", description: "Jelajahi semua tulisan dan artikel teknik" },
-  { id: "web", label: "Web Development", description: "Pengembangan front-end, Next.js, dan arsitektur web modern" },
-  { id: "3d", label: "3D & Creative Tech", description: "Three.js, WebGL, animasi interaktif, dan komputasi grafis" },
-  { id: "design-system", label: "Design Systems & UI", description: "Desain antarmuka, token warna, Tailwind, dan aksesibilitas" },
   { id: "tutorial", label: "Tutorial & Tips", description: "Panduan praktis, tips coding, dan penyelesaian masalah" },
 ];
 
@@ -416,14 +413,14 @@ Dengan memanfaatkan fitur bawaan macOS Automator dan utilitas \`unrar\`, kita ti
     excerpt: "Panduan praktis mengecilkan ukuran file PDF di macOS secara instan menggunakan Quick Action Automator dan Ghostscript langsung dari menu klik kanan Finder tanpa perlu upload ke situs online.",
     category: "tutorial",
     tags: ["macOS", "Automator", "Ghostscript", "PDF", "Tutorial", "Apple Silicon", "Productivity"],
-    coverImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1200&q=80",
+    coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
     coverCaption: "Tutorial Otomasi macOS: Kompresi File PDF Langsung dari Menu Klik Kanan Finder",
-    featured: false,
+    featured: true,
     published: true,
-    publishedAt: "2026-09-21T15:30:00.000Z",
-    updatedAt: "2026-09-21T15:30:00.000Z",
-    readTime: 5,
-    views: 110,
+    publishedAt: "2026-09-21T15:30:00+00:00",
+    updatedAt: "2026-09-26T05:58:10.832+00:00",
+    readTime: 6,
+    views: 125,
     likes: 19,
     author: DEFAULT_AUTHOR,
     content: `## Mengapa Kompresi PDF Lokal Lebih Baik Dibanding Situs Online?

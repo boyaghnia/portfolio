@@ -95,7 +95,7 @@ export function BlogSidebar({
 
   // Resolved list of categories
   const resolvedCategories = React.useMemo(() => {
-    if (categories && categories.length > 0) {
+    if (categories !== undefined) {
       return categories;
     }
     return BLOG_CATEGORIES.filter((c) => c.id !== "all");

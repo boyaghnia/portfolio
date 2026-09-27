@@ -314,7 +314,7 @@ export function CategoryManager({
                       <span className="font-semibold text-sm sm:text-base text-foreground">
                         {category.label}
                       </span>
-                      <code className="text-xs font-mono bg-muted/60 text-muted-foreground px-1.5 py-0.5 border border-border/40">
+                      <code className="text-xs font-mono bg-muted/60 text-muted-foreground px-1.5 py-0.5 rounded-none border border-border/40">
                         slug: {category.id}
                       </code>
                       <Badge

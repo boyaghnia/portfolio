@@ -123,25 +123,34 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  body.protected-content {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
   }
-  input,
-  textarea {
+  body.protected-content input,
+  body.protected-content textarea,
+  body.protected-content [contenteditable="true"] {
     -webkit-user-select: text !important;
     -moz-user-select: text !important;
     -ms-user-select: text !important;
     user-select: text !important;
   }
-  img,
-  video {
+  body.protected-content img,
+  body.protected-content video {
     -webkit-user-drag: none;
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
     user-drag: none;
+  }
+  @media print {
+    body.protected-content {
+      display: none !important;
+      visibility: hidden !important;
+    }
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {

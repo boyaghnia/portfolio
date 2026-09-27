@@ -61,6 +61,17 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        <noscript>
+          <style>{`
+            html, body {
+              display: none !important;
+              visibility: hidden !important;
+              opacity: 0 !important;
+              background: #000000 !important;
+              pointer-events: none !important;
+            }
+          `}</style>
+        </noscript>
         <GoogleAdSense />
         <ThemeProvider
           attribute="class"

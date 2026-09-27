@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDbPosts, readLocalPosts } from "@/utils/supabase/blog";
+import { getDbPosts, getDbCategories, readLocalPosts } from "@/utils/supabase/blog";
 import { INITIAL_POSTS, BLOG_CATEGORIES } from "@/data/blog";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +35,13 @@ export async function GET() {
   }
 
   // XML items for categories
-  const categoriesXml = BLOG_CATEGORIES.filter((cat) => cat.id !== "all")
+  let categories = await getDbCategories().catch(() => []);
+  if (!categories || categories.length === 0) {
+    categories = BLOG_CATEGORIES.filter((cat) => cat.id !== "all");
+  }
+
+  const categoriesXml = categories
+    .filter((cat) => cat.id !== "all")
     .map((cat) => {
       return `  <url>
     <loc>${baseUrl}/blog?category=${encodeURIComponent(cat.id)}</loc>

@@ -75,7 +75,7 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
 
     // Custom inline code
     renderer.codespan = function ({ text }) {
-      return `<code class="px-1.5 py-0.5 rounded-sm bg-muted font-mono text-xs sm:text-sm text-primary font-medium border border-border/50">${text}</code>`;
+      return `<code class="px-1.5 py-0.5 rounded-none font-mono text-xs sm:text-sm font-semibold bg-amber-500/10 dark:bg-amber-400/10 text-amber-800 dark:text-amber-300 border border-amber-500/25 dark:border-amber-400/25">${text}</code>`;
     };
 
     // Custom strong (bold text: **bold**)

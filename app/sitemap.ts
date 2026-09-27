@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getDbPosts, readLocalPosts } from "@/utils/supabase/blog";
+import { getDbPosts, getDbCategories, readLocalPosts } from "@/utils/supabase/blog";
 import { INITIAL_POSTS, BLOG_CATEGORIES } from "@/data/blog";
 
 export const revalidate = 3600; // Cache for 1 hour, then regenerate in background
@@ -53,7 +53,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
   // 4. Generate dynamic category URLs
-  const categoryUrls: MetadataRoute.Sitemap = BLOG_CATEGORIES
+  let categories = await getDbCategories().catch(() => []);
+  if (!categories || categories.length === 0) {
+    categories = BLOG_CATEGORIES.filter((c) => c.id !== "all");
+  }
+
+  const categoryUrls: MetadataRoute.Sitemap = categories
     .filter((cat) => cat.id !== "all")
     .map((cat) => ({
       url: `${baseUrl}/blog?category=${encodeURIComponent(cat.id)}`,

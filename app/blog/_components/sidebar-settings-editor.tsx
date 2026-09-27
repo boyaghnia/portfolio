@@ -1306,7 +1306,7 @@ export function SidebarSettingsEditor({
                       className="rounded-none border-border/40 font-mono text-xs"
                     />
                     <p className="text-[10px] text-muted-foreground font-mono">
-                      * Otomatis menambahkan <code>https://</code> jika memasukkan domain tanpa protokol (misal: <code>instagram.com/...</code>).
+                      * Otomatis menambahkan <code className="px-1 py-0.5 rounded-none bg-muted border border-border/50 text-foreground font-semibold">https://</code> jika memasukkan domain tanpa protokol (misal: <code className="px-1 py-0.5 rounded-none bg-muted border border-border/50 text-foreground font-semibold">instagram.com/...</code>).
                     </p>
                   </div>
 
