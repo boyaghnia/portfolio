@@ -1384,7 +1384,7 @@ export function SidebarSettingsEditor({
                       onChange={(e) =>
                         setAdForm({ ...adForm, adsenseClient: e.target.value })
                       }
-                      placeholder="ca-pub-xxxxxxxxxxxxxxxx"
+                      placeholder="ca-pub-8425634623967324"
                       className="rounded-none border-border/40 font-mono text-xs"
                     />
                   </div>
