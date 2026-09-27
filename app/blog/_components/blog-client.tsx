@@ -56,6 +56,17 @@ export function BlogClient({
     setSidebarConfig(initialSidebarConfig);
   }, [initialSidebarConfig]);
 
+  // Read initial query params from URL on mount
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("category");
+      const q = params.get("search");
+      if (cat) setSelectedCategory(cat);
+      if (q) setSearchQuery(q);
+    }
+  }, []);
+
   // Synchronize with URL on popstate (browser back/forward)
   React.useEffect(() => {
     const handlePopState = () => {

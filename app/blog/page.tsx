@@ -3,15 +3,9 @@ import { readSidebarConfig } from "@/app/api/blog/sidebar/route";
 import { BlogClient } from "./_components/blog-client";
 import { BlogCategoryOption } from "@/data/blog";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60; // Incremental Static Regeneration: 0ms instant prefetch!
 
-interface BlogPageProps {
-  searchParams?: Promise<{ category?: string; search?: string }>;
-}
-
-export default async function BlogIndexPage({ searchParams }: BlogPageProps) {
-  const resolvedParams = searchParams ? await searchParams : {};
+export default async function BlogIndexPage() {
   const [posts, dbCategories] = await Promise.all([
     getDbPosts(),
     getDbCategories(),
@@ -32,8 +26,6 @@ export default async function BlogIndexPage({ searchParams }: BlogPageProps) {
       initialPosts={posts}
       initialCategories={categories}
       initialSidebarConfig={sidebarConfig}
-      initialCategory={resolvedParams.category || "all"}
-      initialSearch={resolvedParams.search || ""}
     />
   );
 }

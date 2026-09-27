@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { BlogCategoryOption } from "@/data/blog";
 import { isOwnerAuthorized } from "../route";
 import {
@@ -89,6 +90,14 @@ export async function POST(req: Request) {
 
     const created = await createDbCategory(newCategory);
 
+    try {
+      revalidatePath("/blog");
+      revalidatePath("/sitemap.xml");
+      revalidatePath("/blog/sitemap.xml");
+    } catch (e) {
+      console.warn("Revalidate error:", e);
+    }
+
     return NextResponse.json({
       success: true,
       message: `Kategori '${newCategory.label}' berhasil ditambahkan ke Supabase!`,
@@ -146,6 +155,14 @@ export async function PUT(req: Request) {
       color: color?.trim() || existing.color || "#3B82F6",
     });
 
+    try {
+      revalidatePath("/blog");
+      revalidatePath("/sitemap.xml");
+      revalidatePath("/blog/sitemap.xml");
+    } catch (e) {
+      console.warn("Revalidate error:", e);
+    }
+
     return NextResponse.json({
       success: true,
       message: `Kategori '${updated.label}' berhasil diperbarui di Supabase!`,
@@ -194,6 +211,14 @@ export async function DELETE(req: Request) {
     }
 
     await deleteDbCategory(id);
+
+    try {
+      revalidatePath("/blog");
+      revalidatePath("/sitemap.xml");
+      revalidatePath("/blog/sitemap.xml");
+    } catch (e) {
+      console.warn("Revalidate error:", e);
+    }
 
     return NextResponse.json({
       success: true,
