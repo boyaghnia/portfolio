@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   BlogPost,
   INITIAL_POSTS,
@@ -141,6 +142,14 @@ export async function POST(req: Request) {
     const created = await createDbPost(newPost);
     const updatedList = await getDbPosts({ includeDrafts: true });
 
+    try {
+      revalidatePath("/sitemap.xml");
+      revalidatePath("/blog/sitemap.xml");
+      revalidatePath("/blog");
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
+
     return NextResponse.json({
       success: true,
       message: "Artikel berhasil dibuat di Supabase!",
@@ -229,6 +238,15 @@ export async function PUT(req: Request) {
     const updated = await updateDbPost(postData.id, updates);
     const updatedList = await getDbPosts({ includeDrafts: true });
 
+    try {
+      revalidatePath("/sitemap.xml");
+      revalidatePath("/blog/sitemap.xml");
+      revalidatePath("/blog");
+      if (slug) revalidatePath(`/blog/${slug}`);
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
+
     return NextResponse.json({
       success: true,
       message: "Artikel berhasil diperbarui di Supabase!",
@@ -266,6 +284,14 @@ export async function DELETE(req: Request) {
 
     await deleteDbPost(id);
     const updatedList = await getDbPosts({ includeDrafts: true });
+
+    try {
+      revalidatePath("/sitemap.xml");
+      revalidatePath("/blog/sitemap.xml");
+      revalidatePath("/blog");
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
 
     return NextResponse.json({
       success: true,

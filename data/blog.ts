@@ -35,6 +35,7 @@ export interface BlogCategoryOption {
 
 export type SidebarWidgetId =
   | "search"
+  | "buy-me-coffee"
   | "related-posts"
   | "categories"
   | "top-posts"
@@ -44,6 +45,7 @@ export type SidebarWidgetId =
 
 export const DEFAULT_WIDGET_ORDER: SidebarWidgetId[] = [
   "search",
+  "buy-me-coffee",
   "ad:ad-1",
   "related-posts",
   "ad:ad-2",
@@ -93,6 +95,10 @@ export interface SidebarConfig {
   categoriesTitle?: string;
   showRelatedPosts?: boolean;
   relatedPostsTitle?: string;
+  showBuyMeCoffee?: boolean;
+  buyMeCoffeeTitle?: string;
+  buyMeCoffeeSubtitle?: string;
+  buyMeCoffeeUrl?: string;
   ads?: SidebarAdItem[];
   ad?: SidebarAdConfig;
 }
@@ -107,6 +113,10 @@ export const DEFAULT_SIDEBAR_CONFIG: SidebarConfig = {
   categoriesTitle: "Kategori Topik",
   showRelatedPosts: true,
   relatedPostsTitle: "Artikel Terkait",
+  showBuyMeCoffee: true,
+  buyMeCoffeeTitle: "Buy Me a Coffee",
+  buyMeCoffeeSubtitle: "Traktir kopi untuk dukung kreator",
+  buyMeCoffeeUrl: "/donasi",
   ads: [
     {
       id: "ad-1",
@@ -114,7 +124,7 @@ export const DEFAULT_SIDEBAR_CONFIG: SidebarConfig = {
       type: "image",
       title: "Sponsor & Kolaborasi",
       imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      targetUrl: "https://boyaghnia.my.id/#contact",
+      targetUrl: "https://boyaghnia.web.id/#contact",
       altText: "Open for Software Engineering & UI/UX Collaboration",
       caption: "Tertarik berkolaborasi atau memasang sponsor di blog ini? Hubungi saya untuk diskusi proyek atau kemitraan.",
       adsenseClient: "",
@@ -128,7 +138,7 @@ export const DEFAULT_SIDEBAR_CONFIG: SidebarConfig = {
       type: "image",
       title: "Layanan Web 3D & Creative Tech",
       imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-      targetUrl: "https://boyaghnia.my.id/#projects",
+      targetUrl: "https://boyaghnia.web.id/#projects",
       altText: "Interactive 3D Web Development Services",
       caption: "Hadirkan pengalaman visual imersif dengan Three.js & React Three Fiber untuk brand dan produk Anda.",
       adsenseClient: "",
@@ -143,7 +153,7 @@ export const DEFAULT_SIDEBAR_CONFIG: SidebarConfig = {
     type: "image",
     title: "Sponsor & Kolaborasi",
     imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-    targetUrl: "https://boyaghnia.my.id/#contact",
+    targetUrl: "https://boyaghnia.web.id/#contact",
     altText: "Open for Software Engineering & UI/UX Collaboration",
     caption: "Tertarik berkolaborasi atau memasang sponsor di blog ini? Hubungi saya untuk diskusi proyek atau kemitraan.",
     adsenseClient: "",

@@ -1,16 +1,31 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_storage_SUPABASE_URL ||
-  "";
-const supabaseKey =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.storage_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.storage_SUPABASE_ANON_KEY ||
-  "";
+function getSupabaseServerCredentials() {
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      "";
+    return { url, key };
+  }
+
+  if (process.env.NEXT_PUBLIC_storage_SUPABASE_URL) {
+    const url = process.env.NEXT_PUBLIC_storage_SUPABASE_URL;
+    const key =
+      process.env.storage_SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.storage_SUPABASE_ANON_KEY ||
+      process.env.storage_SUPABASE_PUBLISHABLE_KEY ||
+      "";
+    return { url, key };
+  }
+
+  return { url: "", key: "" };
+}
+
+const { url: supabaseUrl, key: supabaseKey } = getSupabaseServerCredentials();
 
 export const createClient = (cookieStore: Awaited<ReturnType<typeof cookies>>) => {
   return createServerClient(

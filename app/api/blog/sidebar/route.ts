@@ -37,10 +37,23 @@ export function readSidebarConfig(): SidebarConfig {
       }
     }
 
-    const widgetOrder =
+    const rawOrder =
       Array.isArray(parsed.widgetOrder) && parsed.widgetOrder.length > 0
         ? parsed.widgetOrder
         : DEFAULT_WIDGET_ORDER;
+
+    const widgetOrder = [...rawOrder];
+    if (
+      !widgetOrder.includes("buy-me-coffee") &&
+      parsed.showBuyMeCoffee !== false
+    ) {
+      const sIdx = widgetOrder.indexOf("search");
+      if (sIdx !== -1) {
+        widgetOrder.splice(sIdx + 1, 0, "buy-me-coffee");
+      } else {
+        widgetOrder.unshift("buy-me-coffee");
+      }
+    }
 
     return {
       ...DEFAULT_SIDEBAR_CONFIG,

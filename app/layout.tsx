@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ||
       (process.env.VERCEL_PROJECT_PRODUCTION_URL
         ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : "https://boyaghnia.vercel.app"),
+        : "https://boyaghnia.web.id"),
   ),
   title: "Portfolio | Boy Aghnia Rifadhan",
   description: "Portfolio | Boy Aghnia Rifadhan",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     icon: "/images/misc/logo-small.png",
   },
   verification: {
-    google: "muFbNAm2lyPmdfPr7ZF3pV2mLQ2MEXOGkrm1ix6XU4Y",
+    google: "G3MH8BIuOaYQIUIoJ3lE0-LePn5kzpqSZSwyvA2hh-A",
   },
 };
 

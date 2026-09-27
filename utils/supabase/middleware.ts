@@ -9,14 +9,27 @@ export const createClient = async (request: NextRequest) => {
     },
   });
 
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    process.env.NEXT_PUBLIC_storage_SUPABASE_URL;
-  const supabaseKey =
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    process.env.storage_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.storage_SUPABASE_ANON_KEY;
+  function getSupabaseCredentials() {
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key =
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+      if (url && key) return { url, key };
+    }
+
+    if (process.env.NEXT_PUBLIC_storage_SUPABASE_URL) {
+      const url = process.env.NEXT_PUBLIC_storage_SUPABASE_URL;
+      const key =
+        process.env.storage_SUPABASE_ANON_KEY ||
+        process.env.storage_SUPABASE_PUBLISHABLE_KEY;
+      if (url && key) return { url, key };
+    }
+
+    return { url: null, key: null };
+  }
+
+  const { url: supabaseUrl, key: supabaseKey } = getSupabaseCredentials();
 
   // If Supabase credentials are not configured, do not crash the website
   if (!supabaseUrl || !supabaseKey) {

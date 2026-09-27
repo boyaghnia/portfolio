@@ -12,6 +12,7 @@ import {
   ArrowUpRight,
   ArrowLeft,
   Clock,
+  Coffee,
 } from "lucide-react";
 import {
   BlogPost,
@@ -79,8 +80,18 @@ export function BlogSidebar({
       }
     });
 
+    // Ensure buy-me-coffee widget is accounted for in widgetOrder
+    if (!order.includes("buy-me-coffee") && config.showBuyMeCoffee !== false) {
+      const searchIdx = order.indexOf("search");
+      if (searchIdx !== -1) {
+        order.splice(searchIdx + 1, 0, "buy-me-coffee");
+      } else {
+        order.unshift("buy-me-coffee");
+      }
+    }
+
     return order;
-  }, [config.widgetOrder, config.ads, config.ad]);
+  }, [config.widgetOrder, config.ads, config.ad, config.showBuyMeCoffee]);
 
   // Resolved list of categories
   const resolvedCategories = React.useMemo(() => {
@@ -379,6 +390,65 @@ export function BlogSidebar({
             )}
           </div>
         );
+
+      case "buy-me-coffee": {
+        if (config.showBuyMeCoffee === false) return null;
+        const bmcUrl = formatExternalUrl(config.buyMeCoffeeUrl || "/donasi");
+        const isBmcInternal = bmcUrl.startsWith("/") || bmcUrl.startsWith("#");
+        const bmcTitle = config.buyMeCoffeeTitle || "Buy Me a Coffee";
+        const bmcSubtitle =
+          config.buyMeCoffeeSubtitle ?? "Traktir kopi untuk dukung kreator";
+
+        const bmcContent = (
+          <div className="group relative overflow-hidden rounded-none border border-rose-500/35 bg-gradient-to-r from-rose-500/10 via-card/80 to-card/50 hover:from-rose-500/15 hover:via-card hover:to-card/70 px-3.5 py-2.5 sm:py-3 transition-all duration-300 backdrop-blur-md shadow-xs flex items-center justify-between gap-3 hover:border-rose-500/60 cursor-pointer">
+            {/* Subtle glow effect */}
+            <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-rose-500/10 rounded-full blur-xl pointer-events-none group-hover:bg-rose-500/20 transition-all duration-500" />
+
+            <div className="flex items-center gap-2.5 min-w-0">
+              {/* Coffee Icon */}
+              <div className="w-8 h-8 shrink-0 rounded-none bg-rose-500/15 border border-rose-500/30 text-rose-500 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                <Coffee className="w-4 h-4 fill-rose-500/30 text-rose-500" />
+              </div>
+
+              {/* Text */}
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-bold tracking-tight text-foreground group-hover:text-rose-500 dark:group-hover:text-rose-400 transition-colors">
+                    {bmcTitle}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Action: Small compact badge */}
+            <div className="shrink-0 flex items-center gap-1 text-[10px] font-mono font-medium text-rose-500 dark:text-rose-400 bg-rose-500/10 px-1 py-1 border border-rose-500/30 group-hover:text-rose-950 transition-all duration-200">
+              <ArrowUpRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+          </div>
+        );
+
+        return (
+          <div key="buy-me-coffee" className="w-full">
+            {isBmcInternal ? (
+              <Link
+                href={bmcUrl}
+                className="block focus:outline-none focus:ring-1 focus:ring-amber-500/50"
+              >
+                {bmcContent}
+              </Link>
+            ) : (
+              <a
+                href={bmcUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block focus:outline-none focus:ring-1 focus:ring-amber-500/50"
+              >
+                {bmcContent}
+              </a>
+            )}
+          </div>
+        );
+      }
 
       case "related-posts":
         if (

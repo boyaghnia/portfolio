@@ -3,16 +3,30 @@ import { BlogPost, BlogCategoryOption, DEFAULT_AUTHOR } from "@/data/blog";
 import fs from "fs";
 import path from "path";
 
-const supabaseUrl =
-  process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_storage_SUPABASE_URL;
-const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.storage_SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.storage_SUPABASE_PUBLISHABLE_KEY ||
-  process.env.storage_SUPABASE_ANON_KEY;
+// Determine which Supabase instance to connect to, ensuring URL and Key always belong to the same project
+function getSupabaseCredentials() {
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+    if (url && key) return { url, key };
+  }
+
+  if (process.env.NEXT_PUBLIC_storage_SUPABASE_URL) {
+    const url = process.env.NEXT_PUBLIC_storage_SUPABASE_URL;
+    const key =
+      process.env.storage_SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.storage_SUPABASE_ANON_KEY ||
+      process.env.storage_SUPABASE_PUBLISHABLE_KEY;
+    if (url && key) return { url, key };
+  }
+
+  return { url: null, key: null };
+}
+
+const { url: supabaseUrl, key: supabaseKey } = getSupabaseCredentials();
 
 // Initialize Supabase client
 export const supabase =
@@ -232,8 +246,33 @@ export async function getDbPostBySlug(slug: string): Promise<BlogPost | null> {
   }
 }
 
+async function ensureCategoryExists(categoryId?: string) {
+  if (!supabase || !categoryId || categoryId === "all") return;
+  try {
+    const { data } = await supabase
+      .from("categories")
+      .select("id")
+      .eq("id", categoryId)
+      .maybeSingle();
+
+    if (!data) {
+      await supabase.from("categories").insert({
+        id: categoryId,
+        label: categoryId.charAt(0).toUpperCase() + categoryId.slice(1).replace(/-/g, " "),
+        description: `Kategori ${categoryId}`,
+        color: "#3B82F6",
+      });
+    }
+  } catch (err) {
+    console.warn("Could not check/auto-create category in Supabase:", err);
+  }
+}
+
 export async function createDbPost(post: BlogPost): Promise<BlogPost> {
   if (supabase) {
+    if (post.category) {
+      await ensureCategoryExists(post.category);
+    }
     const dbPayload = mapPostToDb(post);
     const { data, error } = await supabase
       .from("posts")
@@ -266,6 +305,9 @@ export async function updateDbPost(
   updates: Partial<BlogPost>
 ): Promise<BlogPost> {
   if (supabase) {
+    if (updates.category) {
+      await ensureCategoryExists(updates.category);
+    }
     const dbPayload = mapPostToDb(updates);
     const { data, error } = await supabase
       .from("posts")

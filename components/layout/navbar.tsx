@@ -128,11 +128,6 @@ export function Navbar() {
                 }`}
               >
                 {item.name}
-                {isBlog && (
-                  <span className="inline-flex items-center px-1.5 py-0.2 text-[10px] font-semibold uppercase tracking-wider rounded-sm bg-primary/15 text-primary">
-                    New
-                  </span>
-                )}
               </Link>
             );
           })}

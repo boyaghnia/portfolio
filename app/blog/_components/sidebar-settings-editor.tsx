@@ -16,6 +16,8 @@ import {
   X,
   AlertCircle,
   ArrowUpRight,
+  Coffee,
+  Search,
 } from "lucide-react";
 import {
   SidebarConfig,
@@ -42,7 +44,7 @@ const PRESET_BANNERS = [
     label: "Tech & Dev Collaboration",
     url: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
     title: "Sponsor & Kolaborasi Terpilih",
-    targetUrl: "https://boyaghnia.my.id/#contact",
+    targetUrl: "https://boyaghnia.web.id/#contact",
     altText: "Open for Software Engineering Collaboration",
     caption:
       "Tertarik berkolaborasi atau memasang sponsor di blog ini? Hubungi saya untuk diskusi proyek atau kemitraan.",
@@ -51,7 +53,7 @@ const PRESET_BANNERS = [
     label: "3D & Creative Tech",
     url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
     title: "Layanan Web 3D & Creative Tech",
-    targetUrl: "https://boyaghnia.my.id/#projects",
+    targetUrl: "https://boyaghnia.web.id/#projects",
     altText: "Interactive 3D Web Development Services",
     caption:
       "Hadirkan pengalaman visual imersif dengan Three.js & React Three Fiber untuk brand dan produk Anda.",
@@ -60,7 +62,7 @@ const PRESET_BANNERS = [
     label: "Design Systems & UI Engineering",
     url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80",
     title: "Konsultasi Frontend & UI/UX",
-    targetUrl: "https://boyaghnia.my.id/#contact",
+    targetUrl: "https://boyaghnia.web.id/#contact",
     altText: "Design System & UI Consulting",
     caption:
       "Membangun sistem antarmuka web yang rapi, cepat, dan terukur dengan Next.js dan Tailwind CSS.",
@@ -77,6 +79,10 @@ const WIDGET_INFO: Record<
   search: {
     label: "Widget Pencarian",
     description: "Kolom pencarian artikel dengan filter kata kunci",
+  },
+  "buy-me-coffee": {
+    label: "Widget Buy Me a Coffee",
+    description: "Tombol dukungan traktir kopi / donasi ukuran landscape",
   },
   "related-posts": {
     label: "Widget Artikel Terkait",
@@ -254,9 +260,10 @@ export function SidebarSettingsEditor({
       }
     });
 
-    // Ensure all 4 system widgets are included
+    // Ensure all 5 system widgets are included
     const systemWidgets = [
       "search",
+      "buy-me-coffee",
       "related-posts",
       "categories",
       "top-posts",
@@ -389,6 +396,8 @@ export function SidebarSettingsEditor({
     switch (widgetId) {
       case "search":
         return config.showSearch;
+      case "buy-me-coffee":
+        return config.showBuyMeCoffee ?? true;
       case "related-posts":
         return config.showRelatedPosts ?? true;
       case "categories":
@@ -832,6 +841,94 @@ export function SidebarSettingsEditor({
               </label>
             </div>
 
+            {/* Widget Buy Me a Coffee */}
+            <div className="p-4 rounded-none border border-border/60 bg-card/60 backdrop-blur-md space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                    <Coffee className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Widget Buy Me a Coffee</span>
+                  </span>
+                  <p className="text-[11px] text-muted-foreground">
+                    Tampilkan tombol dukungan secangkir kopi ukuran landscape
+                  </p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={config.showBuyMeCoffee ?? true}
+                    onChange={(e) =>
+                      setConfig({
+                        ...config,
+                        showBuyMeCoffee: e.target.checked,
+                      })
+                    }
+                    className="sr-only peer"
+                  />
+                  <div className="w-9 h-5 bg-muted peer-focus:outline-none rounded-none peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border border-border"></div>
+                </label>
+              </div>
+
+              {(config.showBuyMeCoffee ?? true) && (
+                <div className="space-y-3 pt-2 border-t border-border/40">
+                  <div>
+                    <label className="block text-[11px] font-mono text-muted-foreground mb-1">
+                      Judul Tombol
+                    </label>
+                    <Input
+                      type="text"
+                      value={config.buyMeCoffeeTitle ?? "Buy Me a Coffee"}
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          buyMeCoffeeTitle: e.target.value,
+                        })
+                      }
+                      className="rounded-none text-xs bg-background font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono text-muted-foreground mb-1">
+                      Keterangan / Subtitle Singkat
+                    </label>
+                    <Input
+                      type="text"
+                      value={
+                        config.buyMeCoffeeSubtitle ??
+                        "Traktir kopi untuk dukung kreator"
+                      }
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          buyMeCoffeeSubtitle: e.target.value,
+                        })
+                      }
+                      className="rounded-none text-xs bg-background font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono text-muted-foreground mb-1">
+                      URL Target Donasi (Internal / Eksternal)
+                    </label>
+                    <Input
+                      type="text"
+                      value={config.buyMeCoffeeUrl ?? "/donasi"}
+                      placeholder="/donasi atau https://saweria.co/..."
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          buyMeCoffeeUrl: e.target.value,
+                        })
+                      }
+                      className="rounded-none text-xs bg-background font-mono"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Widget Kategori */}
             <div className="p-4 rounded-none border border-border/60 bg-card/60 backdrop-blur-md space-y-3">
               <div className="flex items-center justify-between">
@@ -1205,7 +1302,7 @@ export function SidebarSettingsEditor({
                           });
                         }
                       }}
-                      placeholder="https://boyaghnia.my.id/#contact atau instagram.com/..."
+                      placeholder="https://boyaghnia.web.id/#contact atau instagram.com/..."
                       className="rounded-none border-border/40 font-mono text-xs"
                     />
                     <p className="text-[10px] text-muted-foreground font-mono">
