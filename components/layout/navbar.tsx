@@ -21,7 +21,7 @@ const navItems = [
   { name: "Contact", href: "/#contact" },
   { name: "Blog", href: "/blog" },
   { name: "Guestbook", href: "/guest-book" },
-  { name: "Buy Me a Coffee", href: "/donasi" },
+  { name: "Buy Me a Coffee", href: "/buyme-a-coffee" },
 ];
 
 export function Navbar() {
@@ -81,13 +81,13 @@ export function Navbar() {
           {navItems.map((item) => {
             const isGuestbook = item.href === "/guest-book";
             const isBlog = item.href === "/blog";
-            const isDonasi = item.href === "/donasi";
+            const isBuyMeCoffee = item.href === "/buyme-a-coffee";
             const isActive =
               (isGuestbook && pathname === "/guest-book") ||
               (isBlog && pathname.startsWith("/blog")) ||
-              (isDonasi && pathname === "/donasi");
+              (isBuyMeCoffee && pathname === "/buyme-a-coffee");
 
-            if (isDonasi) {
+            if (isBuyMeCoffee) {
               return (
                 <Link
                   key={item.href}
@@ -163,11 +163,11 @@ export function Navbar() {
             {navItems.map((item) => {
               const isGuestbook = item.href === "/guest-book";
               const isBlog = item.href === "/blog";
-              const isDonasi = item.href === "/donasi";
+              const isBuyMeCoffee = item.href === "/buyme-a-coffee";
               const isActive =
                 (isGuestbook && pathname === "/guest-book") ||
                 (isBlog && pathname.startsWith("/blog")) ||
-                (isDonasi && pathname === "/donasi");
+                (isBuyMeCoffee && pathname === "/buyme-a-coffee");
 
               return (
                 <Link
@@ -176,16 +176,16 @@ export function Navbar() {
                   onClick={(e) => handleNavClick(e, item.href)}
                   className={`text-base font-medium px-4 py-2.5 transition-all rounded-none flex items-center justify-between ${
                     isActive
-                      ? isDonasi
+                      ? isBuyMeCoffee
                         ? "text-rose-500 font-semibold bg-rose-500/10"
                         : "text-primary font-semibold bg-primary/10"
-                      : isDonasi
+                      : isBuyMeCoffee
                         ? "text-rose-500 hover:text-rose-400 hover:bg-rose-500/10"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    {isDonasi ? (
+                    {isBuyMeCoffee ? (
                       <>
                         <Heart
                           className={`w-4 h-4 ${

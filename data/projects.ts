@@ -68,12 +68,14 @@ export const PROJECTS: Project[] = [
     highlights: [
       "Penyusunan Design System resmi untuk lingkungan Ditjen Hubud",
       "Koleksi puluhan komponen antarmuka siap pakai yang aksesibel",
-      "Dukungan fleksibel untuk Laravel, Alpine.js, Tailwind, Bootstrap & Vanilla CSS",
+      "Dukungan fleksibel untuk React, Alpine.js, Tailwind, Bootstrap & Vanilla CSS",
       "Standarisasi tampilan web untuk seluruh unit kerja Ditjen Perhubungan Udara",
     ],
     tech: [
       "Laravel",
       "PHP",
+      "React",
+      "TypeScript",
       "Alpine.js",
       "Tailwind CSS",
       "Bootstrap",

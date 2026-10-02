@@ -39,20 +39,27 @@ interface RateLimitRecord {
 const rateLimitMap = new Map<string, RateLimitRecord>();
 
 // Cleanup stale rate limit records every 30 minutes
-setInterval(() => {
-  const oneHourAgo = Date.now() - 3600 * 1000;
-  for (const [ip, record] of rateLimitMap.entries()) {
-    record.postTimestamps = record.postTimestamps.filter((t) => t > oneHourAgo);
-    record.likeTimestamps = record.likeTimestamps.filter((t) => t > oneHourAgo);
-    if (
-      record.postTimestamps.length === 0 &&
-      record.likeTimestamps.length === 0 &&
-      record.lastPostTime < oneHourAgo
-    ) {
-      rateLimitMap.delete(ip);
+setInterval(
+  () => {
+    const oneHourAgo = Date.now() - 3600 * 1000;
+    for (const [ip, record] of rateLimitMap.entries()) {
+      record.postTimestamps = record.postTimestamps.filter(
+        (t) => t > oneHourAgo,
+      );
+      record.likeTimestamps = record.likeTimestamps.filter(
+        (t) => t > oneHourAgo,
+      );
+      if (
+        record.postTimestamps.length === 0 &&
+        record.likeTimestamps.length === 0 &&
+        record.lastPostTime < oneHourAgo
+      ) {
+        rateLimitMap.delete(ip);
+      }
     }
-  }
-}, 30 * 60 * 1000);
+  },
+  30 * 60 * 1000,
+);
 
 function getClientIp(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for");
@@ -68,7 +75,7 @@ function getClientIp(req: Request): string {
 
 function checkRateLimit(
   ip: string,
-  action: "post" | "like"
+  action: "post" | "like",
 ): { allowed: boolean; retryAfter?: number; reason?: string } {
   const now = Date.now();
   let record = rateLimitMap.get(ip);
@@ -234,25 +241,94 @@ export async function POST(req: Request) {
     }
 
     const isOwner =
-      passcode === "boyaghnia" ||
-      passcode === "admin123" ||
-      passcode === "owner" ||
       passcode === "3sopdsi" ||
       passcode === "esopdsi" ||
       passcode === "esopds1";
 
     if (action === "create") {
       const { name, handle, message, tag } = body;
+      const turnstileToken =
+        body["cf-turnstile-response"] || body.turnstileToken;
 
       if (!name || !message) {
         return NextResponse.json(
           { success: false, error: "Nama dan pesan wajib diisi." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      // Non-owner checks: Rate limiting & content validation
+      // Non-owner checks: Turnstile verification, Rate limiting & content validation
       if (!isOwner) {
+        // Canonical Turnstile siteverify check
+        const expectedAction = "guestbook";
+        const expectedHostnames = new Set(
+          (
+            process.env.TURNSTILE_HOSTNAMES ??
+            (process.env.NODE_ENV === "production"
+              ? "boyaghnia.web.id"
+              : "localhost,127.0.0.1,boyaghnia.web.id")
+          )
+            .split(",")
+            .map((h) => h.trim())
+            .filter(Boolean),
+        );
+
+        if (
+          typeof turnstileToken !== "string" ||
+          turnstileToken.length === 0 ||
+          turnstileToken.length > 2048 ||
+          expectedHostnames.size === 0
+        ) {
+          return NextResponse.json(
+            {
+              success: false,
+              error:
+                "Verifikasi keamanan Turnstile diperlukan. Silakan centang verifikasi bot.",
+            },
+            { status: 403 },
+          );
+        }
+
+        let verifyResult: any;
+        try {
+          const verifyRes = await fetch(
+            "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              signal: AbortSignal.timeout(10_000),
+              body: new URLSearchParams({
+                secret: process.env.TURNSTILE_SECRET || "",
+                response: turnstileToken,
+                remoteip: clientIp,
+              }),
+            },
+          );
+          if (!verifyRes.ok) throw new Error(`siteverify ${verifyRes.status}`);
+          verifyResult = await verifyRes.json();
+        } catch (err) {
+          console.error("Turnstile siteverify error:", err);
+          return NextResponse.json(
+            { success: false, error: "Gagal memverifikasi Turnstile." },
+            { status: 403 },
+          );
+        }
+
+        if (
+          !verifyResult.success ||
+          (verifyResult.action && verifyResult.action !== expectedAction) ||
+          !expectedHostnames.has(verifyResult.hostname)
+        ) {
+          console.warn("Turnstile validation failed:", verifyResult);
+          return NextResponse.json(
+            {
+              success: false,
+              error: "Verifikasi bot tidak valid. Silakan coba lagi.",
+            },
+            { status: 403 },
+          );
+        }
+
         const rateLimit = checkRateLimit(clientIp, "post");
         if (!rateLimit.allowed) {
           return NextResponse.json(
@@ -261,7 +337,7 @@ export async function POST(req: Request) {
               error: rateLimit.reason || "Terlalu banyak permintaan.",
               retryAfter: rateLimit.retryAfter,
             },
-            { status: 429 }
+            { status: 429 },
           );
         }
 
@@ -269,7 +345,7 @@ export async function POST(req: Request) {
         if (spamError) {
           return NextResponse.json(
             { success: false, error: spamError },
-            { status: 400 }
+            { status: 400 },
           );
         }
       }
@@ -279,9 +355,7 @@ export async function POST(req: Request) {
       const newEntry: GuestbookEntry = {
         id: `guestbook-${Date.now()}`,
         name: isOwner ? "Boy Aghnia Rifadhan" : name.trim(),
-        handle: isOwner
-          ? "@boyaghnia"
-          : formatHandle(handle),
+        handle: isOwner ? "@boyaghnia" : formatHandle(handle),
         avatarColor: isOwner ? "from-amber-500 to-orange-600" : randomGradient,
         tag: tag || (isOwner ? "Owner Note" : "Sapaan"),
         isOwner: isOwner,
@@ -313,7 +387,7 @@ export async function POST(req: Request) {
       if (!entryId || !name || !message) {
         return NextResponse.json(
           { success: false, error: "Semua kolom balasan wajib diisi." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -327,7 +401,7 @@ export async function POST(req: Request) {
               error: rateLimit.reason || "Terlalu banyak permintaan.",
               retryAfter: rateLimit.retryAfter,
             },
-            { status: 429 }
+            { status: 429 },
           );
         }
 
@@ -335,7 +409,7 @@ export async function POST(req: Request) {
         if (spamError) {
           return NextResponse.json(
             { success: false, error: spamError },
-            { status: 400 }
+            { status: 400 },
           );
         }
       }
@@ -344,7 +418,7 @@ export async function POST(req: Request) {
       if (!entry) {
         return NextResponse.json(
           { success: false, error: "Pesan tidak ditemukan." },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -353,9 +427,7 @@ export async function POST(req: Request) {
       const newReply: GuestbookReply = {
         id: `reply-${Date.now()}`,
         name: isOwner ? "Boy Aghnia Rifadhan" : name.trim(),
-        handle: isOwner
-          ? "@boyaghnia"
-          : formatHandle(handle),
+        handle: isOwner ? "@boyaghnia" : formatHandle(handle),
         avatarColor: isOwner ? "from-amber-500 to-orange-600" : randomGradient,
         isOwner: isOwner,
         message: message.trim(),
@@ -374,7 +446,7 @@ export async function POST(req: Request) {
       if (!rateLimit.allowed) {
         return NextResponse.json(
           { success: false, error: rateLimit.reason },
-          { status: 429 }
+          { status: 429 },
         );
       }
 
@@ -384,7 +456,7 @@ export async function POST(req: Request) {
       if (!entry) {
         return NextResponse.json(
           { success: false, error: "Pesan tidak ditemukan." },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -404,8 +476,11 @@ export async function POST(req: Request) {
     if (action === "delete") {
       if (!isOwner) {
         return NextResponse.json(
-          { success: false, error: "Hanya pemilik yang dapat menghapus pesan." },
-          { status: 403 }
+          {
+            success: false,
+            error: "Hanya pemilik yang dapat menghapus pesan.",
+          },
+          { status: 403 },
         );
       }
 
@@ -414,7 +489,7 @@ export async function POST(req: Request) {
       if (!entryId) {
         return NextResponse.json(
           { success: false, error: "ID pesan wajib disertakan." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -427,7 +502,7 @@ export async function POST(req: Request) {
         }
         return NextResponse.json(
           { success: false, error: "Pesan tidak ditemukan." },
-          { status: 404 }
+          { status: 404 },
         );
       } else {
         const updatedEntries = entries.filter((e) => e.id !== entryId);
@@ -440,7 +515,7 @@ export async function POST(req: Request) {
       if (!isOwner) {
         return NextResponse.json(
           { success: false, error: "Hanya pemilik yang dapat mengedit pesan." },
-          { status: 403 }
+          { status: 403 },
         );
       }
 
@@ -449,7 +524,7 @@ export async function POST(req: Request) {
       if (!entryId || !message?.trim()) {
         return NextResponse.json(
           { success: false, error: "ID dan isi pesan wajib disertakan." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -457,7 +532,7 @@ export async function POST(req: Request) {
       if (!entry) {
         return NextResponse.json(
           { success: false, error: "Pesan tidak ditemukan." },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -466,7 +541,7 @@ export async function POST(req: Request) {
         if (!reply) {
           return NextResponse.json(
             { success: false, error: "Balasan tidak ditemukan." },
-            { status: 404 }
+            { status: 404 },
           );
         }
         reply.message = message.trim();
@@ -483,13 +558,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { success: false, error: "Aksi tidak dikenali." },
-      { status: 400 }
+      { status: 400 },
     );
   } catch (error) {
     console.error("Error in guestbook API:", error);
     return NextResponse.json(
       { success: false, error: "Terjadi kesalahan server internal." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

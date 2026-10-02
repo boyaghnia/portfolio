@@ -116,7 +116,7 @@ export const DEFAULT_SIDEBAR_CONFIG: SidebarConfig = {
   showBuyMeCoffee: true,
   buyMeCoffeeTitle: "Buy Me a Coffee",
   buyMeCoffeeSubtitle: "Traktir kopi untuk dukung kreator",
-  buyMeCoffeeUrl: "/donasi",
+  buyMeCoffeeUrl: "/buyme-a-coffee",
   ads: [
     {
       id: "ad-1",

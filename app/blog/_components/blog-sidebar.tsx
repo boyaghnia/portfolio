@@ -393,7 +393,7 @@ export function BlogSidebar({
 
       case "buy-me-coffee": {
         if (config.showBuyMeCoffee === false) return null;
-        const bmcUrl = formatExternalUrl(config.buyMeCoffeeUrl || "/donasi");
+        const bmcUrl = formatExternalUrl(config.buyMeCoffeeUrl || "/buyme-a-coffee");
         const isBmcInternal = bmcUrl.startsWith("/") || bmcUrl.startsWith("#");
         const bmcTitle = config.buyMeCoffeeTitle || "Buy Me a Coffee";
         const bmcSubtitle =

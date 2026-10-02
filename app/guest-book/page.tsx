@@ -29,6 +29,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import {
+  TurnstileWidget,
+  type TurnstileWidgetHandle,
+} from "./_components/turnstile-widget";
 
 export interface GuestbookReply {
   id: string;
@@ -120,6 +124,10 @@ export default function GuestbookPage() {
 
   // Anti-Spam Rate Limit Cooldown (in seconds)
   const [cooldown, setCooldown] = React.useState(0);
+
+  // Cloudflare Turnstile token & widget ref
+  const [turnstileToken, setTurnstileToken] = React.useState<string>("");
+  const turnstileRef = React.useRef<TurnstileWidgetHandle>(null);
 
   // Owner authentication
   const [isOwnerMode, setIsOwnerMode] = React.useState(false);
@@ -261,6 +269,13 @@ export default function GuestbookPage() {
       return;
     }
 
+    if (!isOwnerMode && !turnstileToken) {
+      alert(
+        "Silakan selesaikan verifikasi keamanan Turnstile terlebih dahulu.",
+      );
+      return;
+    }
+
     if (cooldown > 0 && !isOwnerMode) {
       alert(
         `Harap tunggu ${cooldown} detik sebelum mengirim pesan berikutnya.`,
@@ -284,6 +299,7 @@ export default function GuestbookPage() {
           tag: isOwnerMode ? "Owner Note" : selectedTag,
           passcode: isOwnerMode && isOwnerVerified ? passcode : undefined,
           isPinned: isOwnerMode,
+          turnstileToken,
         }),
       });
 
@@ -315,6 +331,10 @@ export default function GuestbookPage() {
       alert("Terjadi kesalahan jaringan.");
     } finally {
       setSubmitting(false);
+      if (turnstileRef.current) {
+        turnstileRef.current.reset();
+        setTurnstileToken("");
+      }
     }
   };
 
@@ -812,36 +832,52 @@ export default function GuestbookPage() {
               />
             </div>
 
-            {/* Submit button & Cooldown indicator */}
-            <div className="flex items-center justify-between pt-2">
-              <div>
+            {/* Action Row: Turnstile (Left) & Submit button (Right) sejajar */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                {!isOwnerMode && (
+                  <TurnstileWidget
+                    ref={turnstileRef}
+                    action="guestbook"
+                    onVerify={(token) => setTurnstileToken(token)}
+                    onExpire={() => setTurnstileToken("")}
+                    onError={() => setTurnstileToken("")}
+                  />
+                )}
                 {cooldown > 0 && !isOwnerMode && (
                   <span className="text-xs text-amber-500 font-medium">
                     ⏱️ Tunggu {cooldown}s sebelum mengirim lagi
                   </span>
                 )}
               </div>
-              <Button
-                type="submit"
-                disabled={submitting || (cooldown > 0 && !isOwnerMode)}
-                className="rounded-none px-6 font-semibold flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer disabled:opacity-50"
-              >
-                {submitting ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Mengirim...</span>
-                  </>
-                ) : cooldown > 0 && !isOwnerMode ? (
-                  <>
-                    <span>Tunggu ({cooldown}s)</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" />
-                    <span>Kirim Pesan</span>
-                  </>
-                )}
-              </Button>
+
+              <div className="w-full sm:w-auto flex justify-end">
+                <Button
+                  type="submit"
+                  disabled={
+                    submitting ||
+                    (cooldown > 0 && !isOwnerMode) ||
+                    (!isOwnerMode && !turnstileToken)
+                  }
+                  className="rounded-none px-6 font-semibold flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer disabled:opacity-50 h-10 w-full sm:w-auto"
+                >
+                  {submitting ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <span>Mengirim...</span>
+                    </>
+                  ) : cooldown > 0 && !isOwnerMode ? (
+                    <>
+                      <span>Tunggu ({cooldown}s)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Kirim Pesan</span>
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </form>
         </motion.div>

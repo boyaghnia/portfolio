@@ -10,7 +10,7 @@ import { DonationMethods } from "./_components/donation-methods";
 import { DonationFaq } from "./_components/donation-faq";
 import { QrisModal } from "./_components/qris-modal";
 
-export default function DonasiPage() {
+export default function BuyMeACoffeePage() {
   const [isQrisModalOpen, setIsQrisModalOpen] = React.useState(false);
 
   React.useEffect(() => {

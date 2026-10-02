@@ -914,8 +914,8 @@ export function SidebarSettingsEditor({
                     </label>
                     <Input
                       type="text"
-                      value={config.buyMeCoffeeUrl ?? "/donasi"}
-                      placeholder="/donasi atau https://saweria.co/..."
+                      value={config.buyMeCoffeeUrl ?? "/buyme-a-coffee"}
+                      placeholder="/buyme-a-coffee atau https://saweria.co/..."
                       onChange={(e) =>
                         setConfig({
                           ...config,
