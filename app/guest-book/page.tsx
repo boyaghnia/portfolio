@@ -14,7 +14,6 @@ import {
   Search,
   RefreshCw,
   ArrowLeft,
-  Filter,
   User,
   AtSign,
   Trash2,
@@ -58,14 +57,6 @@ export interface GuestbookEntry {
   likes: number;
   replies: GuestbookReply[];
 }
-
-const CATEGORY_TAGS = [
-  { label: "👋 Sapaan", value: "Sapaan" },
-  { label: "💡 Feedback", value: "Feedback" },
-  { label: "🤝 Kolaborasi", value: "Kolaborasi" },
-  { label: "💼 Tawaran Proyek", value: "Proyek" },
-  { label: "❤️ Apresiasi", value: "Apresiasi" },
-];
 
 function formatDate(dateString: string) {
   try {
@@ -112,14 +103,12 @@ export default function GuestbookPage() {
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [selectedCategory, setSelectedCategory] = React.useState("Semua");
   const [activeReplyId, setActiveReplyId] = React.useState<string | null>(null);
 
   // Form states
   const [name, setName] = React.useState("");
   const [handle, setHandle] = React.useState("");
   const [message, setMessage] = React.useState("");
-  const [selectedTag, setSelectedTag] = React.useState("Sapaan");
   const [honeypot, setHoneypot] = React.useState(""); // Invisible honeypot for bot trap
 
   // Anti-Spam Rate Limit Cooldown (in seconds)
@@ -262,6 +251,18 @@ export default function GuestbookPage() {
     setReplyHandle(`@${clean}`);
   };
 
+  const handleTurnstileVerify = React.useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const handleTurnstileExpire = React.useCallback(() => {
+    setTurnstileToken("");
+  }, []);
+
+  const handleTurnstileError = React.useCallback(() => {
+    setTurnstileToken("");
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !message.trim()) {
@@ -296,7 +297,7 @@ export default function GuestbookPage() {
           handle: formattedHandle || undefined,
           message: message.trim(),
           website: honeypot, // Honeypot field
-          tag: isOwnerMode ? "Owner Note" : selectedTag,
+          tag: isOwnerMode ? "Owner Note" : "Pesan",
           passcode: isOwnerMode && isOwnerVerified ? passcode : undefined,
           isPinned: isOwnerMode,
           turnstileToken,
@@ -572,17 +573,12 @@ export default function GuestbookPage() {
   };
 
   const filteredEntries = entries.filter((entry) => {
-    const matchesSearch =
+    return (
       entry.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entry.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (entry.handle &&
-        entry.handle.toLowerCase().includes(searchQuery.toLowerCase()));
-
-    const matchesCategory =
-      selectedCategory === "Semua" ||
-      entry.tag.toLowerCase().includes(selectedCategory.toLowerCase());
-
-    return matchesSearch && matchesCategory;
+        entry.handle.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
   });
 
   const totalReplies = entries.reduce(
@@ -760,31 +756,6 @@ export default function GuestbookPage() {
               </div>
             </div>
 
-            {/* Category / Tag Selection */}
-            {!isOwnerMode && (
-              <div>
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 block">
-                  Kategori Pesan
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {CATEGORY_TAGS.map((tag) => (
-                    <button
-                      key={tag.value}
-                      type="button"
-                      onClick={() => setSelectedTag(tag.value)}
-                      className={`px-3 py-1.5 text-xs font-medium border transition-all rounded-none cursor-pointer ${
-                        selectedTag === tag.value
-                          ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                          : "bg-muted/30 border-border/60 text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                      }`}
-                    >
-                      {tag.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Honeypot field (hidden from real users, traps spambots) */}
             <div
               aria-hidden="true"
@@ -839,9 +810,9 @@ export default function GuestbookPage() {
                   <TurnstileWidget
                     ref={turnstileRef}
                     action="guestbook"
-                    onVerify={(token) => setTurnstileToken(token)}
-                    onExpire={() => setTurnstileToken("")}
-                    onError={() => setTurnstileToken("")}
+                    onVerify={handleTurnstileVerify}
+                    onExpire={handleTurnstileExpire}
+                    onError={handleTurnstileError}
                   />
                 )}
                 {cooldown > 0 && !isOwnerMode && (
@@ -882,40 +853,17 @@ export default function GuestbookPage() {
           </form>
         </motion.div>
 
-        {/* Filter and Search Bar */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-8 max-w-5xl mx-auto">
-          <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-            <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5 shrink-0">
-              <Filter className="w-3.5 h-3.5" /> Filter:
+        {/* Search & Entry Count Bar */}
+        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between mb-8 max-w-5xl mx-auto">
+          <div className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>
+              {entries.length} pesan tercatat
+              {searchQuery.trim() && ` (${filteredEntries.length} ditemukan)`}
             </span>
-            <button
-              type="button"
-              onClick={() => setSelectedCategory("Semua")}
-              className={`px-3 py-1 text-xs font-medium border transition-all rounded-none shrink-0 cursor-pointer ${
-                selectedCategory === "Semua"
-                  ? "bg-foreground text-background border-foreground font-semibold"
-                  : "bg-muted/30 border-border/50 text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Semua ({entries.length})
-            </button>
-            {CATEGORY_TAGS.map((tag) => (
-              <button
-                key={tag.value}
-                type="button"
-                onClick={() => setSelectedCategory(tag.value)}
-                className={`px-3 py-1 text-xs font-medium border transition-all rounded-none shrink-0 cursor-pointer ${
-                  selectedCategory === tag.value
-                    ? "bg-foreground text-background border-foreground font-semibold"
-                    : "bg-muted/30 border-border/50 text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {tag.value}
-              </button>
-            ))}
           </div>
 
-          <div className="relative w-full md:w-64">
+          <div className="relative w-full sm:w-72">
             <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <Input
               type="text"
@@ -997,10 +945,14 @@ export default function GuestbookPage() {
 
                         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
                           <span>{formatDate(entry.createdAt)}</span>
-                          <span>•</span>
-                          <span className="text-[11px] px-2 py-0.2 bg-muted rounded-none">
-                            {entry.tag}
-                          </span>
+                          {entry.isOwner && (
+                            <>
+                              <span>•</span>
+                              <span className="text-[11px] px-2 py-0.2 bg-amber-500/10 text-amber-500 border border-amber-500/20 font-medium">
+                                Owner Note
+                              </span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1037,25 +989,6 @@ export default function GuestbookPage() {
                         <span className="text-xs font-semibold text-amber-500 flex items-center gap-1.5">
                           <Pencil className="w-3.5 h-3.5" /> Edit Komentar
                         </span>
-                        <select
-                          value={editingItem.tag || entry.tag}
-                          onChange={(e) =>
-                            setEditingItem({
-                              ...editingItem,
-                              tag: e.target.value,
-                            })
-                          }
-                          className="text-xs bg-background border border-border/60 px-2 py-1 rounded-none text-foreground"
-                        >
-                          {CATEGORY_TAGS.map((t) => (
-                            <option key={t.value} value={t.value}>
-                              {t.label}
-                            </option>
-                          ))}
-                          {entry.isOwner && (
-                            <option value="Owner Note">Owner Note</option>
-                          )}
-                        </select>
                       </div>
                       <Textarea
                         rows={3}

@@ -9,9 +9,9 @@ const rawBaseUrl =
 const baseUrl = rawBaseUrl.replace(/\/$/, "");
 
 export const metadata: Metadata = {
-  title: "Blog & Artikel Teknik | Boy Aghnia Rifadhan",
+  title: "Blog & Artikel | Boy Aghnia Rifadhan",
   description:
-    "Kumpulan tulisan, tutorial, wawasan teknologi, arsitektur web modern, dan eksplorasi creative coding 3D oleh Boy Aghnia Rifadhan.",
+    "Kumpulan tulisan, tutorial, wawasan teknologi, arsitektur web modern, dan eksplorasi creative coding oleh Boy Aghnia Rifadhan.",
   alternates: {
     canonical: `${baseUrl}/blog`,
   },
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: "Blog & Artikel Teknik | Boy Aghnia Rifadhan",
+    title: "Blog & Artikel | Boy Aghnia Rifadhan",
     description:
-      "Kumpulan tulisan, tutorial, wawasan teknologi, arsitektur web modern, dan eksplorasi creative coding 3D oleh Boy Aghnia Rifadhan.",
+      "Kumpulan tulisan, tutorial, wawasan teknologi, arsitektur web modern, dan eksplorasi creative coding oleh Boy Aghnia Rifadhan.",
     url: `${baseUrl}/blog`,
     siteName: "Boy Aghnia Rifadhan",
     locale: "id_ID",
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blog & Artikel Teknik | Boy Aghnia Rifadhan",
+    title: "Blog & Artikel | Boy Aghnia Rifadhan",
     description:
-      "Kumpulan tulisan, tutorial, wawasan teknologi, arsitektur web modern, dan eksplorasi creative coding 3D oleh Boy Aghnia Rifadhan.",
+      "Kumpulan tulisan, tutorial, wawasan teknologi, arsitektur web modern, dan eksplorasi creative coding oleh Boy Aghnia Rifadhan.",
     creator: "@boyaghnia",
   },
 };

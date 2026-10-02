@@ -16,7 +16,7 @@ export default async function BlogIndexPage() {
     {
       id: "all",
       label: "Semua Topik",
-      description: "Jelajahi semua tulisan dan artikel teknik",
+      description: "Jelajahi semua tulisan dan artikel",
     },
     ...dbCategories,
   ];
