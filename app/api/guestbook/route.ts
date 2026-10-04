@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { SPAM_KEYWORDS } from "@/lib/spam-keywords";
+import { verifyOwnerPasscode } from "@/lib/auth";
 
 export interface GuestbookReply {
   id: string;
@@ -240,10 +241,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, entries });
     }
 
-    const isOwner =
-      passcode === "3sopdsi" ||
-      passcode === "esopdsi" ||
-      passcode === "esopds1";
+    const isOwner = verifyOwnerPasscode(passcode);
+
+    if (action === "verify_owner") {
+      if (isOwner) {
+        return NextResponse.json({ success: true, isOwner: true });
+      }
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Passcode salah! Masukkan passcode admin yang benar.",
+        },
+        { status: 401 }
+      );
+    }
 
     if (action === "create") {
       const { name, handle, message, tag } = body;

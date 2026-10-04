@@ -15,21 +15,10 @@ import {
   readLocalPosts,
   writeLocalPosts,
 } from "@/utils/supabase/blog";
+import { verifyOwnerPasscode } from "@/lib/auth";
 
 export function isOwnerAuthorized(passcode?: string): boolean {
-  if (!passcode) return false;
-  const validCodes = [
-    "boyaghnia",
-    "admin123",
-    "owner",
-    "3sopdsi",
-    "esopdsi",
-    "esopds1",
-  ];
-  if (process.env.BLOG_ADMIN_PASSCODE) {
-    validCodes.push(process.env.BLOG_ADMIN_PASSCODE);
-  }
-  return validCodes.includes(passcode.trim());
+  return verifyOwnerPasscode(passcode);
 }
 
 // Backwards-compatible synchronous helpers for local files if needed
@@ -50,7 +39,8 @@ export async function GET(req: Request) {
     const category = searchParams.get("category");
     const search = searchParams.get("search")?.toLowerCase().trim();
     const includeDrafts = searchParams.get("includeDrafts") === "true";
-    const passcode = searchParams.get("passcode") || req.headers.get("x-admin-passcode");
+    const passcode =
+      searchParams.get("passcode") || req.headers.get("x-admin-passcode");
 
     const isAdmin = isOwnerAuthorized(passcode || undefined);
 
@@ -70,7 +60,7 @@ export async function GET(req: Request) {
     console.error("Error in GET /api/blog:", error);
     return NextResponse.json(
       { success: false, error: "Gagal memuat artikel blog." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -85,7 +75,7 @@ export async function POST(req: Request) {
     if (!isOwnerAuthorized(passcode)) {
       return NextResponse.json(
         { success: false, error: "Akses ditolak. Passcode admin tidak valid." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -97,7 +87,7 @@ export async function POST(req: Request) {
     if (!postData || !postData.title?.trim() || !postData.content?.trim()) {
       return NextResponse.json(
         { success: false, error: "Judul dan isi artikel wajib diisi." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -131,7 +121,7 @@ export async function POST(req: Request) {
       coverCaption: postData.coverCaption?.trim() || undefined,
       featured: Boolean(postData.featured),
       published: Boolean(postData.published),
-      publishedAt: postData.published ? (postData.publishedAt || now) : "",
+      publishedAt: postData.published ? postData.publishedAt || now : "",
       updatedAt: now,
       readTime: calculateReadTime(postData.content),
       views: 0,
@@ -159,8 +149,12 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("Error creating post:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Terjadi kesalahan server saat membuat artikel." },
-      { status: 500 }
+      {
+        success: false,
+        error:
+          error?.message || "Terjadi kesalahan server saat membuat artikel.",
+      },
+      { status: 500 },
     );
   }
 }
@@ -174,14 +168,14 @@ export async function PUT(req: Request) {
     if (!isOwnerAuthorized(passcode)) {
       return NextResponse.json(
         { success: false, error: "Akses ditolak. Passcode admin tidak valid." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     if (!postData || !postData.id) {
       return NextResponse.json(
         { success: false, error: "ID artikel wajib disertakan." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -191,7 +185,7 @@ export async function PUT(req: Request) {
     if (!existing) {
       return NextResponse.json(
         { success: false, error: "Artikel tidak ditemukan." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -202,7 +196,9 @@ export async function PUT(req: Request) {
     if (slug !== existing.slug) {
       let uniqueSlug = slug;
       let counter = 1;
-      while (existingPosts.some((p) => p.id !== existing.id && p.slug === uniqueSlug)) {
+      while (
+        existingPosts.some((p) => p.id !== existing.id && p.slug === uniqueSlug)
+      ) {
         uniqueSlug = `${slug}-${counter++}`;
       }
       slug = uniqueSlug;
@@ -224,8 +220,14 @@ export async function PUT(req: Request) {
         : existing.tags,
       coverImage: postData.coverImage?.trim() || existing.coverImage,
       coverCaption: postData.coverCaption?.trim() ?? existing.coverCaption,
-      featured: typeof postData.featured === "boolean" ? postData.featured : existing.featured,
-      published: typeof postData.published === "boolean" ? postData.published : existing.published,
+      featured:
+        typeof postData.featured === "boolean"
+          ? postData.featured
+          : existing.featured,
+      published:
+        typeof postData.published === "boolean"
+          ? postData.published
+          : existing.published,
       publishedAt: postData.publishedAt
         ? postData.publishedAt
         : isNewlyPublished
@@ -256,8 +258,13 @@ export async function PUT(req: Request) {
   } catch (error: any) {
     console.error("Error updating post:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Terjadi kesalahan server saat memperbarui artikel." },
-      { status: 500 }
+      {
+        success: false,
+        error:
+          error?.message ||
+          "Terjadi kesalahan server saat memperbarui artikel.",
+      },
+      { status: 500 },
     );
   }
 }
@@ -271,14 +278,14 @@ export async function DELETE(req: Request) {
     if (!isOwnerAuthorized(passcode)) {
       return NextResponse.json(
         { success: false, error: "Akses ditolak. Passcode admin tidak valid." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     if (!id) {
       return NextResponse.json(
         { success: false, error: "ID artikel wajib disertakan." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -301,8 +308,12 @@ export async function DELETE(req: Request) {
   } catch (error: any) {
     console.error("Error deleting post:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || "Terjadi kesalahan server saat menghapus artikel." },
-      { status: 500 }
+      {
+        success: false,
+        error:
+          error?.message || "Terjadi kesalahan server saat menghapus artikel.",
+      },
+      { status: 500 },
     );
   }
 }

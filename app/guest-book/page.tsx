@@ -123,6 +123,7 @@ export default function GuestbookPage() {
   const [passcode, setPasscode] = React.useState("");
   const [isOwnerVerified, setIsOwnerVerified] = React.useState(false);
   const [showOwnerModal, setShowOwnerModal] = React.useState(false);
+  const [verifyingOwner, setVerifyingOwner] = React.useState(false);
 
   // Reply form states
   const [replyName, setReplyName] = React.useState("");
@@ -209,19 +210,39 @@ export default function GuestbookPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleVerifyOwner = () => {
-    if (
-      passcode === "3sopdsi" ||
-      passcode === "esopdsi" ||
-      passcode === "esopds1"
-    ) {
-      setIsOwnerVerified(true);
-      setIsOwnerMode(true);
-      setName("Boy Aghnia Rifadhan");
-      setHandle("@boyaghnia");
-      setShowOwnerModal(false);
-    } else {
-      alert("Passcode salah! Masukkan passcode admin yang benar.");
+  const handleVerifyOwner = async () => {
+    if (!passcode.trim()) {
+      alert("Silakan masukkan passcode admin.");
+      return;
+    }
+
+    try {
+      setVerifyingOwner(true);
+      const res = await fetch("/api/guestbook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "verify_owner",
+          passcode: passcode.trim(),
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setIsOwnerVerified(true);
+        setIsOwnerMode(true);
+        setName("Boy Aghnia Rifadhan");
+        setHandle("@boyaghnia");
+        setShowOwnerModal(false);
+      } else {
+        alert(
+          data.error || "Passcode salah! Masukkan passcode admin yang benar.",
+        );
+      }
+    } catch {
+      alert("Terjadi kesalahan jaringan saat verifikasi passcode.");
+    } finally {
+      setVerifyingOwner(false);
     }
   };
 
@@ -1437,10 +1458,11 @@ export default function GuestbookPage() {
                     </Button>
                     <Button
                       type="button"
+                      disabled={verifyingOwner}
                       onClick={handleVerifyOwner}
-                      className="rounded-none text-xs bg-amber-500 hover:bg-amber-600 text-black font-bold cursor-pointer"
+                      className="rounded-none text-xs bg-amber-500 hover:bg-amber-600 text-black font-bold cursor-pointer disabled:opacity-50"
                     >
-                      Verifikasi
+                      {verifyingOwner ? "Memverifikasi..." : "Verifikasi"}
                     </Button>
                   </div>
                 </div>
