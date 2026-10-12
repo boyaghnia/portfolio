@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, QrCode, Copy, Check } from "lucide-react";
+import { X, QrCode, Copy, Check, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface QrisModalProps {
@@ -28,7 +29,7 @@ export function QrisModal({ isOpen, onClose }: QrisModalProps) {
     };
   }, [isOpen, onClose]);
 
-  const nmid = "ID1020021982103";
+  const nmid = "ID1026608150821";
   const merchantName = "BOY AGHNIA RIFADHAN";
 
   const handleCopyNmid = () => {
@@ -97,20 +98,28 @@ export function QrisModal({ isOpen, onClose }: QrisModalProps) {
               </div>
 
               {/* QR Code graphic */}
-              <div className="p-3 bg-white border border-neutral-200 shadow-sm my-2 flex items-center justify-center">
-                <QrCode className="w-48 h-48 text-neutral-950" />
+              <div className="relative w-56 h-56 my-2 bg-white p-2 border border-neutral-200 shadow-sm flex items-center justify-center">
+                <Image
+                  src="/images/misc/qris.jpg"
+                  alt="QRIS Boy Aghnia Rifadhan"
+                  width={224}
+                  height={224}
+                  className="w-full h-full object-contain"
+                  priority
+                />
               </div>
 
               {/* Supported Brands */}
               <div className="w-full mt-3 pt-2 border-t border-neutral-200 text-center">
                 <span className="text-[10px] text-neutral-500 font-sans block">
-                  BCA • Mandiri • BRI • BNI • GoPay • OVO • DANA • ShopeePay • LinkAja
+                  BCA • Mandiri • BRI • BNI • GoPay • OVO • DANA • ShopeePay •
+                  LinkAja
                 </span>
               </div>
             </div>
 
             {/* Merchant Details & Copy */}
-            <div className="flex items-center justify-between p-3 bg-muted/40 border border-border/50 text-xs font-mono mb-4">
+            <div className="flex items-center justify-between p-3 bg-muted/40 border border-border/50 text-xs font-mono mb-3">
               <div>
                 <span className="text-muted-foreground block text-[10px]">
                   ID Merchant (NMID)
@@ -137,9 +146,26 @@ export function QrisModal({ isOpen, onClose }: QrisModalProps) {
               </Button>
             </div>
 
+            {/* Download Button */}
+            <a
+              href="/images/misc/qris.jpg"
+              download="qris-boy-aghnia-rifadhan.jpg"
+              className="w-full block mb-3"
+            >
+              <Button
+                variant="outline"
+                className="w-full rounded-none border-border font-mono text-xs cursor-pointer shadow-sm hover:bg-muted"
+              >
+                <Download className="w-3.5 h-3.5 mr-1.5" />
+                Unduh Gambar QRIS
+              </Button>
+            </a>
+
             {/* Instruction */}
             <p className="text-[11px] text-muted-foreground text-center leading-relaxed">
-              Buka aplikasi m-banking atau e-wallet Anda, pilih menu <strong>Scan / Bayar</strong>, lalu arahkan kamera ke kode QR di atas.
+              Buka aplikasi m-banking atau e-wallet Anda, pilih menu{" "}
+              <strong>Scan / Bayar</strong>, lalu arahkan kamera atau unggah
+              kode QR di atas.
             </p>
           </motion.div>
         </div>

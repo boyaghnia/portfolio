@@ -70,37 +70,25 @@ export function DonationMethods({ onOpenQrisModal }: DonationMethodsProps) {
             {/* Interactive QR Visual Box */}
             <div
               onClick={onOpenQrisModal}
-              className="group/qris relative w-full aspect-square max-w-[210px] mx-auto bg-white p-3 border border-border/80 shadow-md flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-all duration-200"
+              className="group/qris relative w-full aspect-square max-w-52 mx-auto bg-white p-3 border border-border/80 shadow-md flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-all duration-200"
             >
-              <div className="w-full h-full border-2 border-black/10 flex flex-col items-center justify-center p-2 relative bg-neutral-50 text-neutral-900">
-                {/* Header logo */}
-                <div className="w-full flex justify-between items-center pb-1.5 border-b border-black/15 text-[9px] font-mono font-bold tracking-tighter">
-                  <span className="text-rose-600 font-extrabold text-xs">
-                    QRIS
-                  </span>
-                  <span className="text-[8px] text-neutral-500 font-sans">
-                    GPN Standar
-                  </span>
-                </div>
+              <Image
+                src="/images/misc/qris.jpg"
+                alt="QRIS Boy Aghnia Rifadhan"
+                width={250}
+                height={250}
+                className="w-full h-full object-contain group-hover/qris:scale-105 transition-transform duration-200"
+              />
 
-                {/* QR Center Graphic */}
-                <div className="my-auto flex flex-col items-center justify-center">
-                  <QrCode className="w-24 h-24 text-neutral-950 group-hover/qris:scale-105 transition-transform duration-200" />
-                  <span className="text-[9px] font-mono font-semibold text-neutral-700 mt-1">
-                    BOY AGHNIA RIFADHAN
-                  </span>
-                </div>
-
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-neutral-950/85 backdrop-blur-[2px] opacity-0 group-hover/qris:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-200 p-3 text-center">
-                  <QrCode className="w-7 h-7 text-primary mb-1.5" />
-                  <span className="text-xs font-semibold">
-                    Klik untuk Perbesar
-                  </span>
-                  <span className="text-[9px] text-neutral-300 mt-0.5">
-                    Scan langsung dari HP Anda
-                  </span>
-                </div>
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-neutral-950/85 backdrop-blur-[2px] opacity-0 group-hover/qris:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-200 p-3 text-center">
+                <QrCode className="w-7 h-7 text-primary mb-1.5" />
+                <span className="text-xs font-semibold">
+                  Klik untuk Perbesar
+                </span>
+                <span className="text-[9px] text-neutral-300 mt-0.5">
+                  Scan langsung dari HP Anda
+                </span>
               </div>
             </div>
 
